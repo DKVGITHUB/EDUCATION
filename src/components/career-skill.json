@@ -1,0 +1,112 @@
+[
+  {
+      "name": "Project Manager",
+      "skills": ["Time Management", "Leadership", "Communication"],
+      "interests": ["Project Planning", "Team Leadership", "Process Improvement"]
+  },
+  {
+      "name": "Executive Assistant",
+      "skills": ["Time Management", "Organization", "Attention to Detail"],
+      "interests": ["Office Management", "Scheduling", "Administrative Support"]
+  },
+  {
+      "name": "Event Planner",
+      "skills": ["Time Management", "Creativity", "Problem Solving"],
+      "interests": ["Event Coordination", "Event Design", "Client Relations"]
+  },
+  {
+      "name": "Logistics Coordinator",
+      "skills": ["Organization", "Problem Solving", "Communication"],
+      "interests": ["Supply Chain Management", "Inventory Management", "Operational Efficiency"]
+  },
+  {
+      "name": "Public Relations Specialist",
+      "skills": ["Effective Communication", "Media Relations", "Writing"],
+      "interests": ["Public Relations", "Media Outreach", "Brand Management"]
+  },
+  {
+      "name": "Marketing Manager",
+      "skills": ["Effective Communication", "Strategic Planning", "Market Research"],
+      "interests": ["Marketing Strategy", "Consumer Behavior", "Brand Promotion"]
+  },
+  {
+      "name": "Human Resources Manager",
+      "skills": ["Effective Communication", "Employee Relations", "Recruitment"],
+      "interests": ["Talent Management", "Employee Engagement", "Organizational Development"]
+  },
+  {
+      "name": "Management Consultant",
+      "skills": ["Critical Thinking", "Problem Solving", "Analytical Skills"],
+      "interests": ["Business Strategy", "Organizational Improvement", "Operational Efficiency"]
+  },
+  {
+      "name": "Data Scientist",
+      "skills": ["Critical Thinking", "Data Analysis", "Statistical Modeling"],
+      "interests": ["Machine Learning", "Big Data", "Predictive Analytics"]
+  },
+  {
+      "name": "Research Analyst",
+      "skills": ["Critical Thinking", "Research Skills", "Attention to Detail"],
+      "interests": ["Market Research", "Data Interpretation", "Industry Analysis"]
+  },
+  {
+      "name": "Software Developer",
+      "skills": ["Problem Solving", "Programming", "Logical Thinking"],
+      "interests": ["Software Development", "Coding", "Algorithm Design"]
+  },
+  {
+      "name": "Mechanical Engineer",
+      "skills": ["Problem Solving", "Engineering Design", "Analytical Skills"],
+      "interests": ["Mechanical Design", "Product Development", "Manufacturing Processes"]
+  },
+  {
+      "name": "Financial Analyst",
+      "skills": ["Problem Solving", "Financial Modeling", "Data Analysis"],
+      "interests": ["Investment Analysis", "Financial Planning", "Risk Assessment"]
+  },
+  {
+      "name": "Content Writer",
+      "skills": ["Writing and Editing", "Creativity", "Adaptability"],
+      "interests": ["Creative Writing", "Content Creation", "Storytelling"]
+  },
+  {
+      "name": "Editor",
+      "skills": ["Writing and Editing", "Attention to Detail", "Communication"],
+      "interests": ["Content Editing", "Proofreading", "Editorial Management"]
+  },
+  {
+      "name": "Technical Writer",
+      "skills": ["Writing and Editing", "Research Skills", "Clarity"],
+      "interests": ["Technical Documentation", "User Manuals", "Technical Communication"]
+  },
+  {
+      "name": "Change Management Consultant",
+      "skills": ["Adaptability", "Communication", "Problem Solving"],
+      "interests": ["Organizational Change", "Change Strategy", "Employee Training"]
+  },
+  {
+      "name": "Entrepreneur",
+      "skills": ["Adaptability", "Risk-taking", "Innovativeness"],
+      "interests": ["Business Innovation", "Startup Development", "Venture Creation"]
+  },
+  {
+      "name": "Project Manager",
+      "skills": ["Adaptability", "Leadership", "Critical Thinking"],
+      "interests": ["Project Execution", "Risk Management", "Team Coordination"]
+  },
+  {
+      "name": "Market Research Analyst",
+      "skills": ["Research Skills", "Analytical Skills", "Problem Solving"],
+      "interests": ["Consumer Insights", "Market Trends", "Competitive Analysis"]
+  },
+  {
+      "name": "Scientific Researcher",
+      "skills": ["Research Skills", "Critical Thinking", "Attention to Detail"],
+      "interests": ["Scientific Discovery", "Experimental Design", "Data Collection"]
+  },
+  {
+      "name": "Academic Researcher",
+      "skills": ["Research Skills", "Writing and Editing", "Data Analysis"],
+      "interests": ["Academic Publishing", "Scholarly Research", "Literature Review"]
+  }
+]

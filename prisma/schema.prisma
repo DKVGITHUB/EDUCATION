@@ -1,0 +1,268 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mongodb"
+  url      = env("DATABASE_URL")
+}
+
+// INFORMATION MODEL
+model Information {
+  id                String  @id @default(auto()) @map("_id") @db.ObjectId
+  userId            String
+  day               String
+  month             String
+  year              String
+  ethnic            String
+  gender            String
+  hsgradYear        String
+  currAttending     String
+  programmes        String?
+  hsprogrammes      String?
+  engLangGrade      String
+  socStuGrade       String
+  mathGrade         String
+  interScienceGrade String
+  regionOfSchool    String
+  typeOfUni         String
+  skill             String
+  interest          String
+}
+
+model Unis_Page {
+  id       String @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  nickname String
+  founded  Float
+  location String
+  logo     String
+  icon     String
+  website  String
+  type     String
+}
+
+// UNIVERSITY MODEL
+model Unis {
+  id       String  @id @default(auto()) @map("_id") @db.ObjectId
+  name     String
+  nickname String
+  founded  Float
+  location String
+  logo     String
+  icon     String
+  website  String
+  type     String
+  School   School? @relation(fields: [schoolId], references: [id])
+  schoolId String? @db.ObjectId
+}
+
+// MAJORSKILLS MODEL
+model MajorSkills {
+  id          String         @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  skills      Skill_Major[]
+  careers     Career_Major[]
+}
+
+model Skill_Major {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  MajorSkills   MajorSkills? @relation(fields: [majorSkillsId], references: [id])
+  majorSkillsId String?      @db.ObjectId
+}
+
+model Career_Major {
+  id            String       @id @default(auto()) @map("_id") @db.ObjectId
+  name          String
+  MajorSkills   MajorSkills? @relation(fields: [majorSkillsId], references: [id])
+  majorSkillsId String?      @db.ObjectId
+}
+
+// CAREERSKILLS MODEL
+
+model Skill_Career {
+  id     String                @id @default(auto()) @map("_id") @db.ObjectId
+  name   String
+  skills Skill_Career_Skills[]
+}
+
+model Skill_Career_Skills {
+  id             String       @id @default(auto()) @map("_id") @db.ObjectId
+  name           String
+  skillCareersId String       @db.ObjectId
+  skill_Careers  Skill_Career @relation(fields: [skillCareersId], references: [id])
+}
+
+// model Major {
+//   id        String     @id @default(auto()) @map("_id") @db.ObjectId
+//   name      String     
+//   midmajors MidMajor[]
+// }
+
+// model MidMajor {
+//   id      String   @id @default(auto()) @map("_id") @db.ObjectId
+//   skills  Skill[]
+//   careers Career[]
+//   Major   Major?   @relation(fields: [majorId], references: [id])
+//   majorId String?  @db.ObjectId
+// }
+
+// model LastMajor {
+//   id          String    @id @default(auto()) @map("_id") @db.ObjectId
+//   name        String
+//   description String
+//   courses     Course[]
+//   careers     Career[]
+//   salaries    Salary_[]
+//   schools     Unis[]
+// }
+
+// model Course {
+//   id          String     @id @default(auto()) @map("_id") @db.ObjectId
+//   name        String
+//   LastMajor   LastMajor? @relation(fields: [lastMajorId], references: [id])
+//   lastMajorId String?    @db.ObjectId
+// }
+
+// model Skill {
+//   id   String @id @default(auto()) @map("_id") @db.ObjectId
+//   name String
+
+//   MidMajor   MidMajor? @relation(fields: [midMajorId], references: [id])
+//   midMajorId String?   @db.ObjectId
+// }
+
+// model Career {
+//   id   String @id @default(auto()) @map("_id") @db.ObjectId
+//   name String
+
+//   MidMajor    MidMajor?  @relation(fields: [midMajorId], references: [id])
+//   midMajorId  String?    @db.ObjectId
+//   LastMajor   LastMajor? @relation(fields: [lastMajorId], references: [id])
+//   lastMajorId String?    @db.ObjectId
+// }
+
+model Career_List {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String
+
+  categories Career_Category[]
+}
+
+model Career_Category {
+  id           String        @id @default(auto()) @map("_id") @db.ObjectId
+  name         String
+  description  String
+  dos          Do[]
+  educations   Education[]
+  careerskills CareerSkill[]
+  salaries     Salary[]
+  schools      School[]
+  CareerList   Career_List?  @relation(fields: [careerListId], references: [id])
+  careerListId String?       @db.ObjectId
+}
+
+model Do {
+  id         String          @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  categoryId String          @db.ObjectId
+  categories Career_Category @relation(fields: [categoryId], references: [id])
+}
+
+model Education {
+  id         String          @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  categoryId String          @db.ObjectId
+  categories Career_Category @relation(fields: [categoryId], references: [id])
+}
+
+model CareerSkill {
+  id         String          @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  categoryId String          @db.ObjectId
+  categories Career_Category @relation(fields: [categoryId], references: [id])
+}
+
+model Salary {
+  id         String          @id @default(auto()) @map("_id") @db.ObjectId
+  MAW        Float?
+  MHW        Float
+  TEN        String
+  categoryId String          @db.ObjectId
+  categories Career_Category @relation(fields: [categoryId], references: [id])
+}
+
+// model Salary_ {
+//   id  String @id @default(auto()) @map("_id") @db.ObjectId
+//   NAW String
+//   MHW String
+//   TEN String
+
+//   LastMajor   LastMajor? @relation(fields: [lastMajorId], references: [id])
+//   lastMajorId String?    @db.ObjectId
+// }
+
+model School {
+  id           String          @id @default(auto()) @map("_id") @db.ObjectId
+  universities Unis[]
+  categoryId   String          @db.ObjectId
+  categories   Career_Category @relation(fields: [categoryId], references: [id])
+}
+
+// model CareerSkills {
+//   id           String          @id @default(auto()) @map("_id") @db.ObjectId
+//   careerskills CareerSkills_[]
+// }
+
+// model CareerSkills_ {
+//   id   String @id @default(auto()) @map("_id") @db.ObjectId
+//   name String
+
+//   CareerSkills   CareerSkills? @relation(fields: [careerSkillsId], references: [id])
+//   careerSkillsId String?       @db.ObjectId
+// }
+
+model CareerRecommendationsWithSimilarity {
+  id         String                        @id @default(auto()) @map("_id") @db.ObjectId
+  name       String
+  similarity Float
+  skills     CareerRecommendationsSkills[]
+}
+
+model CareerRecommendationsSkills {
+  id                                    String                               @id @default(auto()) @map("_id") @db.ObjectId
+  name                                  String
+  CareerRecommendationsWithSimilarity   CareerRecommendationsWithSimilarity? @relation(fields: [careerRecommendationsWithSimilarityId], references: [id])
+  careerRecommendationsWithSimilarityId String?                              @db.ObjectId
+}
+
+model MajorRecommendationsWithSimilarity {
+  id          String                        @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  description String
+  similarity  Float
+  skills      MajorRecommendationsSkills[]
+  careers     MajorRecommendationsCareers[]
+}
+
+model MajorRecommendationsSkills {
+  id                                   String                              @id @default(auto()) @map("_id") @db.ObjectId
+  name                                 String
+  MajorRecommendationsWithSimilarity   MajorRecommendationsWithSimilarity? @relation(fields: [majorRecommendationsWithSimilarityId], references: [id])
+  majorRecommendationsWithSimilarityId String?                             @db.ObjectId
+}
+
+model MajorRecommendationsCareers {
+  id                                   String                              @id @default(auto()) @map("_id") @db.ObjectId
+  name                                 String
+  MajorRecommendationsWithSimilarity   MajorRecommendationsWithSimilarity? @relation(fields: [majorRecommendationsWithSimilarityId], references: [id])
+  majorRecommendationsWithSimilarityId String?                             @db.ObjectId
+}

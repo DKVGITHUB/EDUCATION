@@ -1,0 +1,290 @@
+[
+  {
+      "name": "Business Administration",
+      "description": "Business Administration is a versatile field that focuses on the management and organization of business operations. It covers a wide range of activities and skills related to planning, organizing, directing, and controlling the resources and processes required for the efficient functioning of an organization. Business administrators play a crucial role in ensuring that an organization achieves its goals and operates effectively.",
+      "skills": [
+          "Time Management",
+          "Leadership",
+          "Problem Solving",
+          "Organization",
+          "Leadership",
+          "Communication",
+          "Problem Solving",
+          "Strategic Planning",
+          "Decision Making"
+      ],
+      "careers": [
+          "Business Analyst",
+          "Financial Analyst",
+          "Marketing Manager",
+          "Human Resources Manager",
+          "Operations Manager",
+          "Entrepreneur",
+          "Management Consultant",
+          "Supply Chain Manager",
+          "Sales Manager",
+          "Executive Assistant"
+      ],
+      "interests": ["Management", "Entrepreneurship", "Leadership", "Business Strategy", "Corporate Governance"]
+  },
+  {
+      "name": "Computer Science",
+      "description": "Computer Science involves the study of computers and computational systems. It encompasses various areas such as programming, algorithm design, and problem-solving.",
+      "skills": [
+          "Time Management",
+          "Analytical Skills",
+          "Programming",
+          "Problem Solving",
+          "Programming",
+          "Algorithm Design",
+          "Problem Solving",
+          "Adaptability",
+          "Research Skills"
+      ],
+      "careers": [
+          "Software Developer",
+          "Data Scientist",
+          "Computer Systems Analyst",
+          "Network Administrator",
+          "Cybersecurity Analyst",
+          "Database Administrator",
+          "AI/Machine Learning Engineer",
+          "Web Developer",
+          "IT Project Manager",
+          "Computer Science Professor"
+      ],
+      "interests": ["Coding", "Artificial Intelligence", "Cybersecurity", "Software Development", "Machine Learning"]
+  },
+  {
+      "name": "Psychology",
+      "description": "Psychology is the scientific study of the mind and behavior. It explores various aspects of human cognition, emotion, and behavior.",
+      "skills": [
+          "Time Management",
+          "Communication",
+          "Research Skills",
+          "Communication",
+          "Research Skills",
+          "Adaptability",
+          "Critical Thinking"
+      ],
+      "careers": [
+          "Clinical Psychologist",
+          "Counselor",
+          "Industrial-Organizational Psychologist",
+          "School Psychologist",
+          "Forensic Psychologist",
+          "Sports Psychologist",
+          "Human Resources Specialist",
+          "Market Research Analyst",
+          "Behavioral Therapist",
+          "Neuropsychologist"
+      ],
+      "interests": ["Mental Health", "Human Behavior", "Cognitive Science", "Counseling", "Research"]
+  },
+  {
+      "name": "Management Information Systems",
+      "description": "Management Information Systems (MIS) focuses on the use of technology to solve business problems and improve organizational efficiency.",
+      "skills": ["Organization", "Problem Solving", "Technology"],
+      "careers": [
+          "IT Manager",
+          "Systems Analyst",
+          "Database Administrator",
+          "Business Intelligence Analyst",
+          "IT Consultant",
+          "Network Administrator",
+          "Project Manager",
+          "Data Analyst",
+          "Cybersecurity Analyst",
+          "Software Developer"
+      ],
+      "interests": ["Technology", "Information Systems", "Business Solutions", "Data Management", "IT Infrastructure"]
+  },
+  {
+      "name": "Public Administration",
+      "description": "Public Administration involves the implementation of government policies and programs. It focuses on effective public service delivery and governance.",
+      "skills": ["Organization", "Policy Analysis", "Public Management"],
+      "careers": [
+          "Public Administrator",
+          "Policy Analyst",
+          "City Manager",
+          "Public Relations Specialist",
+          "Nonprofit Manager",
+          "Political Analyst",
+          "Government Consultant",
+          "Urban Planner",
+          "Public Health Administrator",
+          "Public Affairs Specialist"
+      ],
+      "interests": ["Public Service", "Government", "Policy Development", "Community Development", "Public Health"]
+  },
+  {
+      "name": "Communication Studies",
+      "description": "Communication Studies explores the processes of human communication, including verbal and nonverbal communication, rhetoric, and media studies.",
+      "skills": [
+          "Effective Communication",
+          "Public Speaking",
+          "Interpersonal Skills"
+      ],
+      "careers": [
+          "Public Relations Specialist",
+          "Media Planner",
+          "Social Media Manager",
+          "Speechwriter",
+          "Event Planner",
+          "Market Research Analyst",
+          "Journalist",
+          "Corporate Trainer",
+          "Human Resources Specialist",
+          "Communication Consultant"
+      ],
+      "interests": ["Media", "Public Relations", "Social Media", "Corporate Communication", "Journalism"]
+  },
+  {
+      "name": "Journalism",
+      "description": "Journalism involves gathering, analyzing, and presenting news and information to the public through various media channels.",
+      "skills": [
+          "Effective Communication",
+          "Writing",
+          "Interviewing",
+          "Writing and Editing",
+          "Communication",
+          "Research Skills",
+          "Writing and Editing",
+          "Communication",
+          "Research Skills"
+      ],
+      "careers": [
+          "Journalist",
+          "Editor",
+          "News Anchor",
+          "Reporter",
+          "Content Strategist",
+          "Copywriter",
+          "Public Relations Specialist",
+          "Media Producer",
+          "Multimedia Journalist",
+          "Photojournalist"
+      ],
+      "interests": ["News", "Media", "Writing", "Storytelling", "Public Communication"]
+  },
+  {
+      "name": "Marketing",
+      "description": "Marketing focuses on promoting products or services through various strategies, including advertising, market research, and brand management.",
+      "skills": ["Effective Communication", "Advertising", "Market Research"],
+      "careers": [
+          "Marketing Manager",
+          "Advertising Manager",
+          "Market Research Analyst",
+          "Brand Manager",
+          "Digital Marketing Specialist",
+          "Public Relations Specialist",
+          "Sales Manager",
+          "Social Media Manager",
+          "Content Marketing Manager",
+          "Event Planner"
+      ],
+      "interests": ["Advertising", "Branding", "Digital Marketing", "Market Analysis", "Sales"]
+  },
+  {
+      "name": "Philosophy",
+      "description": "Philosophy involves the study of fundamental questions related to existence, knowledge, values, reason, mind, and language.",
+      "skills": ["Critical Thinking", "Logic", "Analytical Skills"],
+      "careers": [
+          "Philosopher",
+          "Ethics Consultant",
+          "Policy Analyst",
+          "Lawyer",
+          "Academic Researcher",
+          "Editor",
+          "Public Relations Specialist",
+          "Think Tank Analyst",
+          "Critical Thinking Trainer",
+          "Content Strategist"
+      ],
+      "interests": ["Ethics", "Logic", "Metaphysics", "Epistemology", "Philosophical Inquiry"]
+  },
+  {
+      "name": "Biology",
+      "description": "Biology is the scientific study of living organisms and their interactions with each other and their environments.",
+      "skills": [
+          "Research Skills",
+          "Lab Techniques",
+          "Analytical Skills",
+          "Research Skills",
+          "Lab Techniques",
+          "Analytical Skills"
+      ],
+      "careers": [
+          "Biologist",
+          "Research Scientist",
+          "Biomedical Engineer",
+          "Environmental Scientist",
+          "Pharmaceutical Researcher",
+          "Laboratory Technician",
+          "Zoologist",
+          "Conservation Scientist",
+          "Forensic Scientist",
+          "Genetic Counselor"
+      ],
+      "interests": ["Life Sciences", "Ecology", "Genetics", "Biomedical Research", "Environmental Conservation"]
+  },
+  {
+      "name": "English Literature",
+      "description": "English Literature involves the study of written works in the English language, including novels, poetry, and drama, from various periods and cultures.",
+      "skills": [
+          "Writing and Editing",
+          "Critical Thinking",
+          "Writing and Editing",
+          "Critical Thinking"
+      ],
+      "careers": [
+          "Writer",
+          "Editor",
+          "Literary Critic",
+          "Content Strategist",
+          "Copywriter",
+          "Academic Researcher",
+          "Librarian",
+          "Publishing Specialist",
+          "Communications Officer",
+          "Teaching/Professor"
+      ],
+      "interests": ["Literature", "Writing", "Poetry", "Drama", "Critical Analysis"]
+  },
+  {
+      "name": "Engineering",
+      "description": "Engineering involves the application of scientific and mathematical principles to design and create systems, structures, devices, and processes that solve practical problems.",
+      "skills": ["Problem Solving", "Mathematics", "Technical Analysis"],
+      "careers": [
+          "Civil Engineer",
+          "Mechanical Engineer",
+          "Electrical Engineer",
+          "Aerospace Engineer",
+          "Chemical Engineer",
+          "Biomedical Engineer",
+          "Environmental Engineer",
+          "Computer Hardware Engineer",
+          "Structural Engineer",
+          "Materials Engineer"
+      ],
+      "interests": ["Technology", "Innovation", "Design", "Infrastructure", "Technical Solutions"]
+  },
+  {
+      "name": "Creative Writing",
+      "description": "Creative Writing involves the creation of original works of fiction, nonfiction, poetry, and other forms of literary expression.",
+      "skills": ["Writing and Editing", "Creativity"],
+      "careers": [
+          "Author",
+          "Screenwriter",
+          "Copywriter",
+          "Content Creator",
+          "Editor",
+          "Creative Writing Professor",
+          "Journalist",
+          "Literary Agent",
+          "Ghostwriter",
+          "Advertising Copywriter"
+      ],
+      "interests": ["Fiction", "Nonfiction", "Poetry", "Storytelling", "Literary Arts"]
+  }
+]
