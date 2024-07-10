@@ -42,7 +42,7 @@ interface CareerProps {
 [];
 
 // Main component definition
-export default function CAREER({ career }: CareerProps) {
+export default function CAREER() {
   // Accessing context data and functions
   const { setData } = useGlobalContext();
 

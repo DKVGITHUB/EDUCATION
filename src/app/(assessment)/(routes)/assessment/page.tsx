@@ -338,8 +338,6 @@ const Assessment = () => {
       );
       const { careers, majors, unis, skills, interests } = response.data;
 
-      console.log(careers, majors);
-
       const saveArrayToLocalStorage = (key: string, array: any) => {
         try {
           if (array === undefined || array === null) {
@@ -348,10 +346,9 @@ const Assessment = () => {
             );
             return;
           }
-          console.log(`Saving ${key} to localStorage.`);
+
           const json = JSON.stringify(array);
           localStorage.setItem(key, json);
-          console.log(`${key} successfully saved to localStorage.`);
         } catch (error) {
           console.error(`Error saving ${key} to localStorage:`, error);
         }
@@ -373,21 +370,8 @@ const Assessment = () => {
         return false;
       };
 
-      console.log("Checking for cyclic references...");
-      console.log(
-        "careerRecommendationWithSimilarityAboveZero:",
-        isCyclic(careers)
-      );
-      console.log(
-        "majorRecommendationWithSimilarityAboveZero:",
-        isCyclic(majors)
-      );
-      console.log("unisWithTypeWithRegion:", isCyclic(unis));
       // Check if the variables are defined and not null
       if (!isCyclic(careers) && !isCyclic(majors) && !isCyclic(unis)) {
-        console.log(
-          "No cyclic references detected. Proceeding to save to localStorage."
-        );
         saveArrayToLocalStorage(
           "CareerRecommendationWithSimilarityAboveZero",
           careers
@@ -404,7 +388,6 @@ const Assessment = () => {
           try {
             const json = localStorage.getItem(key);
             if (json) {
-              console.log(`${key} retrieved from localStorage.`);
               return JSON.parse(json);
             } else {
               console.warn(`${key} not found in localStorage.`);
@@ -423,10 +406,6 @@ const Assessment = () => {
           "MajorRecommendationWithSimilarityAboveZero"
         );
         const storedUnis = getArrayFromLocalStorage("UnisWithTypeWithRegion");
-
-        console.log("Stored Career:", storedCareer);
-        console.log("Stored Major:", storedMajor);
-        console.log("Stored Unis:", storedUnis);
       } else {
         console.error(
           "One or more of the data arrays contain cyclic references and cannot be saved to localStorage."

@@ -4,22 +4,6 @@ import { NextResponse } from "next/server";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-type MajorRecommendationWithSimilarityAboveZero = {
-  name: string;
-  description: string;
-  similarity: number;
-  skills: string[];
-  careers: string[];
-};
-
-type CareerRecommendationWithSimilarityAboveZero = {
-  name: string;
-  description?: string;
-  similarity: number;
-  skills: string[];
-  careers?: string[];
-};
-
 const History = async () => {
   const { userId } = auth();
   //This line checks if there is no userId (i.e., the user is not authenticated) or if the user is not a mentor. If either condition is true, it returns a NextResponse with an "UNAUTHORIZED" status code (401).
