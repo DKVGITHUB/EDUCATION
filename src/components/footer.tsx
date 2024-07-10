@@ -126,12 +126,14 @@ export default function Footer() {
         <div className="mt-[100px] mb-10 box-border w-full flex flex-initial flex-row flex-wrap">
           {/* Company Information */}
           <div className=" p-4">
-            <h4 className="text-[1.5rem] font-semibold mb-[30px]">Company</h4>
+            <h4 className="text-[1.3rem] font-semibold mb-[30px] uppercase">
+              Company
+            </h4>
             <ul>
               {/* List items with links to company-related pages */}
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-[1rem]"
+                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   About Us
@@ -140,7 +142,7 @@ export default function Footer() {
 
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-[1rem]"
+                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   Careers
@@ -148,7 +150,7 @@ export default function Footer() {
               </li>
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-[1rem]"
+                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   Ambassadors
@@ -157,7 +159,7 @@ export default function Footer() {
 
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-[1rem]"
+                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   Privacy
@@ -165,7 +167,7 @@ export default function Footer() {
               </li>
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-[1rem]"
+                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   Terms
@@ -175,12 +177,14 @@ export default function Footer() {
           </div>
           {/* Resources */}
           <div className=" p-4">
-            <h4 className="text-[1.5rem] font-semibold mb-[30px]">Resources</h4>
+            <h4 className="text-[1.3rem] font-semibold mb-[30px] uppercase">
+              Resources
+            </h4>
             <ul>
               {/* List items with links to resource-related pages */}
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-[1rem]"
+                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   FAQs
@@ -189,7 +193,7 @@ export default function Footer() {
 
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-[1rem]"
+                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   Security
@@ -197,7 +201,7 @@ export default function Footer() {
               </li>
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-[1rem]"
+                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   Blog
@@ -206,7 +210,7 @@ export default function Footer() {
 
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-[1rem]"
+                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   Help Center
@@ -216,12 +220,14 @@ export default function Footer() {
           </div>
           {/* Contact Details */}
           <div className=" p-4">
-            <h4 className="text-[1.5rem] font-semibold mb-[30px]">Contact</h4>
+            <h4 className="text-[1.3rem] font-semibold mb-[30px] uppercase">
+              Contact
+            </h4>
             <ul>
               {/* List items with contact information */}
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-[1rem]"
+                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   support@edu-all.com
@@ -230,7 +236,7 @@ export default function Footer() {
 
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-[1rem]"
+                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   Whatsapp

@@ -209,6 +209,7 @@ const Assessment = () => {
     if (value !== "4 year college") {
       setIs4Y(false);
       setIsAlternative(false);
+      setIsModal(false);
     }
     form.resetField("programmes");
     form.resetField("alprogrammes");
@@ -336,6 +337,8 @@ const Assessment = () => {
         }
       );
       const { careers, majors, unis, skills, interests } = response.data;
+
+      console.log(careers, majors);
 
       const saveArrayToLocalStorage = (key: string, array: any) => {
         try {
@@ -650,11 +653,8 @@ const Assessment = () => {
                             <DialogContent className="sm:max-w-md">
                               <DialogHeader>
                                 <DialogTitle>
-                                  Are you absolutely sure?
+                                  Would you like to add an optional program?
                                 </DialogTitle>
-                                <DialogDescription>
-                                  You can add optional programmes.
-                                </DialogDescription>
                               </DialogHeader>
                               <DialogFooter>
                                 <DialogClose asChild ref={closeRef}>

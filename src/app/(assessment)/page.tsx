@@ -14,7 +14,6 @@ export default function Home() {
     <main>
       <Hero />
       <Features />
-      <Footer />
     </main>
   );
 }

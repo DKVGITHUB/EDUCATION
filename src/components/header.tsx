@@ -1,7 +1,7 @@
 "use client";
 
 // Import necessary dependencies and modules
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { usePathname } from "next/navigation";
@@ -19,12 +19,36 @@ import {
 import { Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
 
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
+import { Textarea } from "./ui/textarea";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
+import axios from "axios";
+
+const formSchema = z.object({
+  feedback: z.string().min(1),
+});
+
 // Define navigation links
 const Routes = [
   { name: "Assessment", href: "/assessment" },
   { name: "Career", href: "/career" },
   { name: "Universities", href: "/unis" },
   { name: "FAQ'S", href: "/faq" },
+  { name: "History", href: "/history" },
 ];
 
 // Navigation component definition
@@ -32,7 +56,13 @@ export const Header = () => {
   // Hooks for managing state
   const pathname = usePathname();
 
+  const { user, isSignedIn } = useUser();
+
   const isAssessment = pathname === "/assessment";
+
+  const closeRef = useRef(null);
+
+  const [close, setClose] = useState(false);
 
   // State for managing sticky navigation and mobile navigation visibility
   const [isNavigationSticky, setNavigationSticky] = useState(false);
@@ -68,6 +98,32 @@ export const Header = () => {
     // Close the mobile navbar when the pathname changes
     setMobileNavigationTriggered(false);
   }, [pathname]);
+
+  const form = useForm<z.infer<typeof formSchema>>({
+    resolver: zodResolver(formSchema),
+    defaultValues: {
+      feedback: "",
+    },
+  });
+
+  const onSubmit = async (data: any) => {
+    const feedback = data.feedback;
+    const name = user?.fullName;
+    const email = user?.emailAddresses[0].emailAddress;
+    form.resetField("feedback");
+
+    const response = await axios.post(
+      "api/feedback",
+      JSON.stringify({ feedback, name, email }),
+      {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      }
+    );
+
+    console.log(response.data);
+  };
 
   // Component rendering
   return (
@@ -183,6 +239,70 @@ export const Header = () => {
                 </li>
               ))}
             </ul>
+            {isSignedIn && (
+              <div>
+                <Dialog>
+                  <DialogTrigger asChild>
+                    <Button
+                      variant={"outline"}
+                      className={
+                        "mr-7 text-sm bg-[none] text-[#0066f5] shadow-none  max-[980px]:hidden "
+                      }
+                    >
+                      Feedback{" "}
+                    </Button>
+                  </DialogTrigger>
+                  <DialogContent className="sm:max-w-[425px]">
+                    <DialogHeader>
+                      <DialogTitle>Share Feedback</DialogTitle>
+                      <DialogDescription>
+                        Provide us insights on the accuracy and helpfulness of
+                        the recommendations you've received.
+                      </DialogDescription>
+                    </DialogHeader>
+                    <Form {...form}>
+                      <form
+                        className="grid gap-4 py-4"
+                        onSubmit={form.handleSubmit(onSubmit)}
+                      >
+                        <FormField
+                          control={form.control}
+                          name="feedback"
+                          render={({ field }) => (
+                            <FormItem>
+                              <FormControl>
+                                <div className="grid grid-cols-4 items-center gap-4">
+                                  <Label
+                                    htmlFor="feedback"
+                                    className="text-right"
+                                  >
+                                    Feedback
+                                  </Label>
+                                  <Textarea
+                                    {...field}
+                                    className="col-span-3"
+                                    placeholder="Type your message here."
+                                  />
+                                </div>
+                              </FormControl>
+
+                              <FormMessage className="text-sm" />
+                            </FormItem>
+                          )}
+                        />
+                        <DialogFooter>
+                          <DialogClose asChild>
+                            <Button type="submit" ref={closeRef}>
+                              Send Message
+                            </Button>
+                          </DialogClose>
+                        </DialogFooter>
+                      </form>
+                    </Form>
+                  </DialogContent>
+                </Dialog>
+              </div>
+            )}
 
             <div className=" justify-between hidden items-center min-[1030px]:flex">
               <ClerkLoading>

@@ -1,3 +1,4 @@
+import Footer from "@/components/footer";
 import { Header } from "@/components/header";
 
 type Props = {
@@ -11,6 +12,7 @@ const AssessmentLayout = ({ children }: Props) => {
       <main className="flex flex-col max-w-[1380px] px-7 w-full mx-auto overflow-hidden mt-[100px] mb-10">
         {children}
       </main>
+      <Footer />
     </div>
   );
 };

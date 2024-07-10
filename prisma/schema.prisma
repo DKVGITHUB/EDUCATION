@@ -266,3 +266,52 @@ model MajorRecommendationsCareers {
   MajorRecommendationsWithSimilarity   MajorRecommendationsWithSimilarity? @relation(fields: [majorRecommendationsWithSimilarityId], references: [id])
   majorRecommendationsWithSimilarityId String?                             @db.ObjectId
 }
+
+model RecommendationHistory {
+  id                     String                  @id @default(auto()) @map("_id") @db.ObjectId
+  userId                 String
+  recommendationsMajors  RecommendationMajors[]
+  recommendationsCareers RecommendationCareers[]
+  skills                 String[]
+  interests              String[]
+}
+
+model RecommendationMajors {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  similarity  Float
+  name        String
+  description String
+  skills      String[]
+  interests   String[]
+  careers     String[]
+
+  RecommendationHistory   RecommendationHistory? @relation(fields: [recommendationHistoryId], references: [id])
+  recommendationHistoryId String?                @db.ObjectId
+}
+
+model RecommendationCareers {
+  id          String   @id @default(auto()) @map("_id") @db.ObjectId
+  similarity  Float
+  name        String
+  description String?
+  skills      String[]
+  interests   String[]
+  careers     String[]
+
+  RecommendationHistory   RecommendationHistory? @relation(fields: [recommendationHistoryId], references: [id])
+  recommendationHistoryId String?                @db.ObjectId
+}
+
+model Feedbacks {
+  id        String     @id @default(auto()) @map("_id") @db.ObjectId
+  feedbacks Feedback[]
+}
+
+model Feedback {
+  id          String     @id @default(auto()) @map("_id") @db.ObjectId
+  name        String
+  email       String
+  feedback    String
+  Feedbacks   Feedbacks? @relation(fields: [feedbacksId], references: [id])
+  feedbacksId String?    @db.ObjectId
+}

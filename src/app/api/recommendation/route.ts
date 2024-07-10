@@ -14,10 +14,27 @@ import { getUniqueAttributes, vectorize } from "@/lib/vectorize";
 type RecommendationType = {
   similarity: number;
   name: string;
-  description?: string;
+  description?: string | undefined;
   skills: string[];
   interests: string[];
   careers?: string[];
+};
+
+type MajorRecommendationType = {
+  similarity: number;
+  name: string;
+  description: string;
+  skills: string[];
+  interests: string[];
+  careers: string[];
+};
+
+type CareerRecommendationType = {
+  similarity: number;
+  name: string;
+  description?: string | undefined;
+  skills: string[];
+  interests: string[];
 };
 
 //This line exports an asynchronous function named POST that takes a Request object as an argument. This function likely handles POST requests to create a new course.
@@ -45,7 +62,7 @@ export async function POST(req: Request) {
     const userInterestsVector = vectorize(interest, uniqueInterests);
 
     const recommendations = [...majors, ...careers]
-      .map((item): RecommendationType => {
+      .map((item): any => {
         const itemSkillsVector = vectorize(item.skills, uniqueSkills);
         const itemInterestsVector = vectorize(item.interests, uniqueInterests);
 
@@ -66,16 +83,16 @@ export async function POST(req: Request) {
       .sort((a, b) => b.similarity - a.similarity);
 
     const recommendationsWithSimilarityAboveZeroThree = recommendations.filter(
-      (rec: any) => rec.similarity > 0.3
+      (rec: any) => rec.similarity > 0.2
     );
 
     const majorRecommendations =
       recommendationsWithSimilarityAboveZeroThree.filter(
-        (item: RecommendationType) => item.careers
+        (item: MajorRecommendationType) => item.description
       );
     const careerRecommendations =
       recommendationsWithSimilarityAboveZeroThree.filter(
-        (item: RecommendationType) => !item.careers
+        (item: CareerRecommendationType) => !item.description
       );
 
     const unisWithTypeWithRegion = await db.unis.findMany({
@@ -84,6 +101,22 @@ export async function POST(req: Request) {
         location: { contains: school },
       },
     });
+
+    const createHistory = await db.recommendationHistory.create({
+      data: {
+        userId: userId,
+        recommendationsCareers: {
+          create: careerRecommendations,
+        },
+        recommendationsMajors: {
+          create: majorRecommendations,
+        },
+        skills: skill,
+        interests: interest,
+      },
+    });
+
+    console.log("Recommendation history created successfully!", createHistory);
 
     // This line returns a NextResponse with a JSON representation of the skill.
     return NextResponse.json({
