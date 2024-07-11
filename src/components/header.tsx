@@ -175,7 +175,7 @@ export const Header = () => {
             </ClerkLoading>
             <ClerkLoaded>
               <SignedIn>
-                <UserButton />
+                <UserButton showName />
               </SignedIn>
               <li className="mt-[18px]">
                 <SignedOut>
@@ -313,7 +313,7 @@ export const Header = () => {
               </ClerkLoading>
               <ClerkLoaded>
                 <SignedIn>
-                  <UserButton />
+                  <UserButton showName />
                 </SignedIn>
                 <SignedOut>
                   <SignInButton>
