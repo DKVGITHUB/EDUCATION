@@ -1,14 +1,14 @@
 import { db } from "@/lib/db";
 import { auth } from "@clerk/nextjs/server";
-import { NextResponse } from "next/server";
 
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { redirect } from "next/navigation";
 
 const History = async () => {
   const { userId } = auth();
   //This line checks if there is no userId (i.e., the user is not authenticated) or if the user is not a mentor. If either condition is true, it returns a NextResponse with an "UNAUTHORIZED" status code (401).
   if (!userId) {
-    return new NextResponse("UNAUTHORIZED", { status: 401 });
+    return redirect("https://comic-marmoset-93.accounts.dev/sign-in");
   }
   const historyData = await db.recommendationHistory.findMany({
     where: {
@@ -53,7 +53,7 @@ const History = async () => {
   return (
     <div className="grid grid-cols-2 gap-4 max-w-[1380px] w-full mx-auto mt-9 px-7 py-0">
       {/* Mapping through the university data and rendering individual cards */}
-      {historyData.length > 0 &&
+      {historyData.length > 0 ? (
         historyData.map((item) => {
           const majorRecommendationWithMajor =
             getMajorRecommendationWithMajorById(item.id);
@@ -177,7 +177,10 @@ const History = async () => {
               </div>
             </div>
           );
-        })}
+        })
+      ) : (
+        <div>NO ASSESSMENT HISTORY</div>
+      )}
     </div>
   );
 };

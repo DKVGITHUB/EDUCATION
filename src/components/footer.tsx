@@ -10,7 +10,7 @@ export default function Footer() {
       svg: (
         // Twitter SVG icon
         <svg
-          className="h-4 w-4 fill-[rgba(8,37,82,0.6)] mr-4"
+          className="h-4 w-4 fill-white mr-4"
           xmlns="http://www.w3.org/2000/svg"
           fill="#022B69"
           width="24"
@@ -30,7 +30,7 @@ export default function Footer() {
       svg: (
         // Facebook SVG icon
         <svg
-          className="h-4 w-4 fill-[rgba(8,37,82,0.6)] mr-4"
+          className="h-4 w-4 fill-white mr-4"
           xmlns="http://www.w3.org/2000/svg"
           fill="#022B69"
           width="24"
@@ -49,7 +49,7 @@ export default function Footer() {
       href: "https://wa.me/message",
       svg: (
         <svg
-          className="h-4 w-4 fill-[rgba(8,37,82,0.6)] mr-4"
+          className="h-4 w-4 fill-white mr-4"
           xmlns="http://www.w3.org/2000/svg"
           width="32"
           height="32"
@@ -67,7 +67,7 @@ export default function Footer() {
       href: "https://t.me/",
       svg: (
         <svg
-          className="h-4 w-4 fill-[rgba(8,37,82,0.6)] mr-4"
+          className="h-4 w-4 fill-white mr-4"
           xmlns="http://www.w3.org/2000/svg"
           width="460"
           height="386"
@@ -85,7 +85,7 @@ export default function Footer() {
       href: "https://instagram.com/",
       svg: (
         <svg
-          className="h-4 w-4 fill-[rgba(8,37,82,0.6)] mr-4"
+          className="h-4 w-4 fill-white mr-4"
           xmlns="http://www.w3.org/2000/svg"
           width="32"
           height="32"
@@ -103,7 +103,7 @@ export default function Footer() {
       href: "https://youtube.com/",
       svg: (
         <svg
-          className="h-4 w-4 fill-[rgba(8,37,82,0.6)] mr-4"
+          className="h-4 w-4 fill-white mr-4"
           viewBox="0 0 48 48"
           tabIndex={-1}
           svg-inline=""
@@ -119,21 +119,21 @@ export default function Footer() {
     },
   ];
   return (
-    <footer className="bg-[url(/footer-bg.svg)] bg-no-repeat bg-auto bg-[0_1080px] pb-[50px]">
+    <footer className="bg-[#242628]">
       <div className="max-w-[1380px] w-full mx-auto my-0 px-5 py-0">
         {/* Section with company information, resources, and contact details */}
 
         <div className="mt-[100px] mb-10 box-border w-full flex flex-initial flex-row flex-wrap">
           {/* Company Information */}
           <div className=" p-4">
-            <h4 className="text-[1.3rem] font-semibold mb-[30px] uppercase">
+            <h4 className="text-[1.3rem] text-white font-semibold mb-[30px] uppercase">
               Company
             </h4>
             <ul>
               {/* List items with links to company-related pages */}
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
+                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   About Us
@@ -142,7 +142,7 @@ export default function Footer() {
 
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
+                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   Careers
@@ -150,7 +150,7 @@ export default function Footer() {
               </li>
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
+                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   Ambassadors
@@ -159,7 +159,7 @@ export default function Footer() {
 
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
+                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   Privacy
@@ -167,7 +167,7 @@ export default function Footer() {
               </li>
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
+                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   Terms
@@ -177,14 +177,14 @@ export default function Footer() {
           </div>
           {/* Resources */}
           <div className=" p-4">
-            <h4 className="text-[1.3rem] font-semibold mb-[30px] uppercase">
+            <h4 className="text-[1.3rem] text-white font-semibold mb-[30px] uppercase">
               Resources
             </h4>
             <ul>
               {/* List items with links to resource-related pages */}
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
+                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   FAQs
@@ -193,7 +193,7 @@ export default function Footer() {
 
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
+                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   Security
@@ -201,7 +201,7 @@ export default function Footer() {
               </li>
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
+                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   Blog
@@ -210,7 +210,7 @@ export default function Footer() {
 
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
+                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   Help Center
@@ -220,14 +220,14 @@ export default function Footer() {
           </div>
           {/* Contact Details */}
           <div className=" p-4">
-            <h4 className="text-[1.3rem] font-semibold mb-[30px] uppercase">
+            <h4 className="text-[1.3rem] text-white font-semibold mb-[30px] uppercase">
               Contact
             </h4>
             <ul>
               {/* List items with contact information */}
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
+                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   support@edu-all.com
@@ -236,7 +236,7 @@ export default function Footer() {
 
               <li className="mt-2 mb-0 list-none">
                 <a
-                  className=" text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-base"
+                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
                   href="/"
                 >
                   Whatsapp
@@ -245,8 +245,7 @@ export default function Footer() {
             </ul>
           </div>
         </div>
-        {/* Horizontal line as a separator */}
-        <hr className="h-px w-full bg-[rgba(8,37,82,0.05)] border-0" />
+
         {/* Section with social media links */}
         <div className="box-border w-full flex flex-initial flex-row flex-wrap">
           <div className="box-border basis-[58.3333333333%] max-w-[58.3333333333%] p-4">
@@ -256,7 +255,7 @@ export default function Footer() {
                 <li key={i} className="inline-block mt-5">
                   {/* Social media link with corresponding SVG icon */}
                   <a
-                    className="font-medium text-[rgba(8,37,82,0.6)] transition-opacity duration-[0.3s] ease-[ease] text-[1.46rem]"
+                    className="font-medium text-white transition-opacity duration-[0.3s] ease-[ease] text-[1.46rem]"
                     href={item.href}
                   >
                     {item.svg}

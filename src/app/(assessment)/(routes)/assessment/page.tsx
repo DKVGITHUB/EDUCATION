@@ -851,7 +851,7 @@ const Assessment = () => {
                                       <CommandList>
                                         {skillOpen &&
                                         selectablesSkills.length > 0 ? (
-                                          <div className="absolute top-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in">
+                                          <div className="relative bottom-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in max-h-30 overflow-y-auto">
                                             <CommandGroup className="h-full overflow-auto">
                                               {selectablesSkills.map(
                                                 (option) => {
@@ -962,8 +962,8 @@ const Assessment = () => {
                                       <CommandList>
                                         {interestOpen &&
                                         selectablesInterests.length > 0 ? (
-                                          <div className="absolute top-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in">
-                                            <CommandGroup className="h-full overflow-auto">
+                                          <div className="relative bottom-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in max-h-30 overflow-y-auto">
+                                            <CommandGroup>
                                               {selectablesInterests.map(
                                                 (option) => {
                                                   return (
