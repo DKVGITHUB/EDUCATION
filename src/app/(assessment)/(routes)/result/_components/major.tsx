@@ -144,7 +144,7 @@ export default function Major() {
       ) : (
         <div className="p-5">
           <h3 className="text-base">
-            We can't provide you with the majors you required.
+            We can&apos;t provide you with the majors you required.
           </h3>
         </div>
       )}

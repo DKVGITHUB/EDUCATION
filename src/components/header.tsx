@@ -257,7 +257,7 @@ export const Header = () => {
                       <DialogTitle>Share Feedback</DialogTitle>
                       <DialogDescription>
                         Provide us insights on the accuracy and helpfulness of
-                        the recommendations you've received.
+                        the recommendations you&apos;ve received.
                       </DialogDescription>
                     </DialogHeader>
                     <Form {...form}>

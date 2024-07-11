@@ -32,7 +32,7 @@ export default function College() {
       ) : (
         <div className="p-5">
           <h3 className="text-base">
-            We can't provide you with the universities you required.
+            We can&apos;t provide you with the universities you required.
           </h3>
         </div>
       )}
