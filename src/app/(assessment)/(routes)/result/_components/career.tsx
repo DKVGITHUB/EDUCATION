@@ -76,7 +76,7 @@ export default function Career() {
       ) : (
         <div className="p-5">
           <h3 className="text-base">
-            We can't provide you with the careers you required.
+            We can&apos;t provide you with the careers you required.
           </h3>
         </div>
       )}
