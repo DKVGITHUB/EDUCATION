@@ -123,7 +123,7 @@ export default function Footer() {
       <div className="max-w-[1380px] w-full mx-auto my-0 px-5 py-0">
         {/* Section with company information, resources, and contact details */}
 
-        <div className="mt-[100px] mb-10 box-border w-full flex flex-initial flex-row flex-wrap">
+        <div className="mt-[100px] mb-10 box-border w-full flex flex-initial flex-row flex-wrap justify-between">
           {/* Company Information */}
           <div className=" p-4">
             <h4 className="text-[1.3rem] text-white font-semibold mb-[30px] uppercase">
