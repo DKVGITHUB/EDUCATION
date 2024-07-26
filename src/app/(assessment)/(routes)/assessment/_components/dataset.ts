@@ -47,22 +47,13 @@ export const ethnic = [
 
 // ... (options for Ghana regions)
 export const ghanaRegions = [
-  { label: "Ahafo", value: "Ahafo" },
   { label: "Ashanti", value: "Ashanti" },
-  { label: "Bono", value: "Bono" },
-  { label: "Bono East", value: "Bono East" },
+
   { label: "Central", value: "Central" },
   { label: "Eastern", value: "Eastern" },
   { label: "Greater Accra", value: "Greater Accra" },
-  { label: "North East", value: "North East" },
-  { label: "Northern", value: "Northern" },
-  { label: "Oti", value: "Oti" },
-  { label: "Savannah", value: "Savannah" },
-  { label: "Upper East", value: "Upper East" },
-  { label: "Upper West", value: "Upper West" },
+
   { label: "Volta", value: "Volta" },
-  { label: "Western", value: "Western" },
-  { label: "Western North", value: "Western North" },
 ];
 
 // ... (options for college skills)
@@ -109,77 +100,72 @@ export const interestingCareers = [
   "Creative Writing",
 ];
 
-export const Grades = [
-  {
-    A1: [
-      "English Language",
-      "Integrated Science",
-      "Mathematics (Core)",
-      "Social Studies",
-    ],
-    B2: [
-      "English Language",
-      "Integrated Science",
-      "Mathematics (Core)",
-      "Social Studies",
-    ],
-    B3: [
-      "English Language",
-      "Integrated Science",
-      "Mathematics (Core)",
-      "Social Studies",
-    ],
-    C4: [
-      "English Language",
-      "Integrated Science",
-      "Mathematics (Core)",
-      "Social Studies",
-    ],
-    C5: [
-      "English Language",
-      "Integrated Science",
-      "Mathematics (Core)",
-      "Social Studies",
-    ],
-    C6: [
-      "English Language",
-      "Integrated Science",
-      "Mathematics (Core)",
-      "Social Studies",
-    ],
-  },
-];
-
-export const HSProgrammes = [
-  { program: "General Science" },
-  { program: "General Arts" },
-  { program: "Buisiness" },
-  { program: "Home Economics" },
-  { program: "Visual Arts" },
-  { program: "Agriculture" },
-  { program: "Technical Studies" },
-];
-
-export const Programmes = [
-  {
-    program: "Bachelor of Arts",
-    grades: Grades,
-  },
-  { program: "Bachelor of Fine Arts", grades: Grades },
-  { program: "Bachelor of Law", grades: Grades },
-  { program: "Bachelor of Science in Administration", grades: Grades },
-  { program: "Bachelor of Science in Agriculture", grades: Grades },
-  { program: "Doctor of Veterinary Medicine", grades: Grades },
-  {
-    program:
-      "Bachelor of Science in Engineering (Agricultural, Biomedical, Computer, Food Process, Materials)",
-    grades: Grades,
-  },
-  {
-    program: "Bachelor of Science in Family and Consumer Sciences",
-    grades: Grades,
-  },
-  { program: "Bachelor of Science in Natural Sciences", grades: Grades },
+export const HSPrograms = [
+  "General Science",
+  "General Arts",
+  "Buisiness",
+  "Home Economics",
+  "Visual Arts",
+  "Agriculture",
+  "Technical Studies",
 ];
 
 export const grades = ["A1", "B2", "B3", "C4", "C5", "C6"];
+
+export const programs = [
+  {
+    name: "Business Administration",
+    subjects: [
+      "English",
+      "Mathematics",
+      "Integrated Science",
+      "Social Studies",
+    ],
+    electives: ["Business Management", "Economics", "Elective Mathematics"],
+  },
+  {
+    name: "Bachelor of Law (LLB)",
+    subjects: [
+      "English",
+      "Mathematics",
+      "Integrated Science",
+      "Social Studies",
+    ],
+    electives: ["Literature in English", "Government", "History"],
+  },
+  {
+    name: "Bachelor of Arts (BA)",
+    subjects: [
+      "English",
+      "Mathematics",
+      "Integrated Science",
+      "Social Studies",
+    ],
+    electives: ["Literature in English", "Fine Arts", "Economics"],
+  },
+  {
+    name: "Bachelor in Architecture",
+    subjects: [
+      "English",
+      "Mathematics",
+      "Integrated Science",
+      "Social Studies",
+    ],
+    electives: ["Physics", "Elective Mathematics", "Economics"],
+  },
+  {
+    name: "Information Technology (IT)",
+    subjects: [
+      "English Language",
+      "Mathematics (Core)",
+      "Integrated Science",
+      "Social Studies",
+    ],
+    electives: [
+      "Elective Mathematics",
+      "Physics",
+      "Chemistry",
+      "Computer Studies/ICT",
+    ],
+  },
+];

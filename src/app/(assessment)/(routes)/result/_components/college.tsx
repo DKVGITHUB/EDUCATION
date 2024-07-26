@@ -4,8 +4,8 @@ export default function College() {
   const [unis, setUnis] = useState([]);
   useEffect(() => {
     // Transforming the assessment data into an array if it's not already
-    const unparsed: any = localStorage.getItem("UnisWithTypeWithRegion");
-    const unis = JSON.parse(unparsed);
+    const unparsed: string | null = localStorage.getItem("UNIS");
+    const unis = JSON.parse(unparsed as string);
 
     setUnis(unis);
   }, [unis]);

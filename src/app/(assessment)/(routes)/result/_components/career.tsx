@@ -1,32 +1,27 @@
 import { useEffect, useState } from "react";
 
-type CareerRecommendationWithSimilarityAboveZero = {
+type CAREER = {
   name: string;
   similarity: number;
   skills: string[];
 };
 
-type UserSkillsOrInterests = string[];
+type SKILLSORINTERESETS = string[];
 
 export default function Career() {
-  const [careers, setCareers] = useState<
-    CareerRecommendationWithSimilarityAboveZero[]
-  >([]);
-  const [skills, setSkills] = useState<UserSkillsOrInterests[]>([]);
+  const [careers, setCareers] = useState<CAREER[]>([]);
+  const [skills, setSkills] = useState<SKILLSORINTERESETS[]>([]);
 
-  const [interests, setInterests] = useState<UserSkillsOrInterests[]>([]);
+  const [interests, setInterests] = useState<SKILLSORINTERESETS[]>([]);
 
   useEffect(() => {
-    const Unparsed: any = localStorage.getItem(
-      "CareerRecommendationWithSimilarityAboveZero"
-    );
-    const unparsedUserSkills: any = localStorage.getItem("SkillsUserChoice");
-    const unparsedUserInterests: any = localStorage.getItem(
-      "InterestsUserChoice"
-    );
-    const careers = JSON.parse(Unparsed);
-    const skills = JSON.parse(unparsedUserSkills);
-    const interests = JSON.parse(unparsedUserInterests);
+    const Unparsed: string | null = localStorage.getItem("CAREERS");
+    const unparsedUserSkills: string | null = localStorage.getItem("SKILLS");
+    const unparsedUserInterests: string | null =
+      localStorage.getItem("INTERESTS");
+    const careers = JSON.parse(Unparsed as string);
+    const skills = JSON.parse(unparsedUserSkills as string);
+    const interests = JSON.parse(unparsedUserInterests as string);
     setCareers(careers);
     setSkills(skills);
     setInterests(interests);
@@ -57,20 +52,11 @@ export default function Career() {
             className="grid grid-cols-2  list-disc ml-7"
             data-testid="list-container"
           >
-            {careers?.map(
-              (
-                item: CareerRecommendationWithSimilarityAboveZero,
-                i: number
-              ) => (
-                <li
-                  key={i}
-                  className="text-sm item-list"
-                  data-testid="item-list"
-                >
-                  {item.name}
-                </li>
-              )
-            )}
+            {careers?.map((item: CAREER, i: number) => (
+              <li key={i} className="text-sm item-list" data-testid="item-list">
+                {item.name}
+              </li>
+            ))}
           </ul>
         </>
       ) : (

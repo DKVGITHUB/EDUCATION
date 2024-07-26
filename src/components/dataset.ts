@@ -3306,3 +3306,31 @@ export const UnisPage = [
     type: "private",
   },
 ];
+
+export const programs = {
+  "BSc. Information Technology": {
+    subjects: ["Mathematics", "Computer Science", "Information Systems"],
+    prerequisites: ["English", "Mathematics"],
+    curriculum: ["Database Management", "Software Development"],
+  },
+  "BEng. Civil Engineering": {
+    subjects: ["Mathematics", "Physics", "Technical Drawing"],
+    prerequisites: ["English", "Mathematics", "Physics"],
+    curriculum: ["Structural Analysis", "Construction Materials"],
+  },
+  "BFA. Fine Arts": {
+    subjects: ["Art", "History of Art"],
+    prerequisites: ["English"],
+    curriculum: ["Painting", "Sculpture"],
+  },
+};
+
+// Student's course credits (sample):
+export const studentCredits = {
+  English: 4,
+  Mathematics: 5,
+  Physics: 3,
+  "Technical Drawing": 2,
+  "Building Construction": 1,
+  Art: 0,
+};

@@ -11,15 +11,6 @@ import { auth } from "@clerk/nextjs/server";
 import { NextResponse } from "next/server";
 import { getUniqueAttributes, vectorize } from "@/lib/vectorize";
 
-type RecommendationType = {
-  similarity: number;
-  name: string;
-  description?: string | undefined;
-  skills: string[];
-  interests: string[];
-  careers?: string[];
-};
-
 type MajorRecommendationType = {
   similarity: number;
   name: string;
@@ -42,14 +33,14 @@ export async function POST(req: Request) {
   //This line calls the auth function to get information about the current user, specifically their userId.
   const { userId } = auth();
   //This line uses req.json() to parse the incoming request body as JSON and extract the title property from it.
-  const { skill, interest, school, type } = await req.json();
+  const { skill, interest, regionOfSchool, typeOfUni } = await req.json();
   try {
     //This line checks if there is no userId (i.e., the user is not authenticated) or if the user is not a mentor. If either condition is true, it returns a NextResponse with an "UNAUTHORIZED" status code (401).
     if (!userId) {
       return new NextResponse("UNAUTHORIZED", { status: 401 });
     }
 
-    if (!skill && !interest && !school && !type) {
+    if (!skill && !interest && !regionOfSchool && !typeOfUni) {
       return new NextResponse("VALUES NOT FOUND", { status: 401 });
     }
     const uniqueSkills = getUniqueAttributes([...majors, ...careers], "skills");
@@ -97,8 +88,8 @@ export async function POST(req: Request) {
 
     const unisWithTypeWithRegion = await db.unis.findMany({
       where: {
-        type: type,
-        location: { contains: school },
+        type: typeOfUni,
+        location: { contains: regionOfSchool },
       },
     });
 

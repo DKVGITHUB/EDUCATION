@@ -1,13 +1,13 @@
-"use client";
+"use client"; // Indicates that this is a client-side module in Next.js
 
-import { useUser } from "@clerk/nextjs";
-import { redirect, useRouter } from "next/navigation";
+// Import necessary hooks and functions from various libraries
+import { useUser } from "@clerk/nextjs"; // Hook to get the current user's information from Clerk
+import { redirect, useRouter } from "next/navigation"; // Functions for navigation and redirection in Next.js
+import { camelCase, debounce } from "lodash"; // Utility functions from lodash: camelCase and debounce
+import { HashLoader } from "react-spinners"; // HashLoader component from react-spinners for loading animations
+import axios from "axios"; // Axios library for making HTTP requests
 
-import { HashLoader } from "react-spinners";
-import axios from "axios";
-import { useForm } from "react-hook-form";
-import { zodResolver } from "@hookform/resolvers/zod";
-import * as z from "zod";
+import * as z from "zod"; // Zod library for schema validation
 import {
   Form,
   FormField,
@@ -15,29 +15,11 @@ import {
   FormControl,
   FormMessage,
   FormLabel,
-} from "@/components/ui/form";
-import { Command as CommandPrimitive } from "cmdk";
+} from "@/components/ui/form"; // Importing form components from a custom UI library
+import { Command as CommandPrimitive } from "cmdk"; // Command component from cmdk for command palette-like UI
+import { useEffect, useCallback } from "react"; // React hooks for side effects and memoized callbacks
+import { Button } from "@/components/ui/button"; // Button component from a custom UI library
 
-import { MultiCombobox } from "@/components/ui/multi-combobox";
-import {
-  daysOfMonth,
-  month,
-  years,
-  ethnic,
-  graduationYears,
-  currentlyAttending,
-  Programmes,
-  grades,
-  HSProgrammes,
-  ghanaRegions,
-  typeUnis,
-  collegeSkills,
-  interestingCareers,
-} from "./_components/dataset";
-
-import { useRef, useState, useEffect, useCallback } from "react";
-import { Button } from "@/components/ui/button";
-import { useGlobalContext } from "@/app/context/store";
 import {
   Dialog,
   DialogClose,
@@ -47,381 +29,277 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
-} from "@/components/ui/dialog";
-import { skillsToVector } from "@/lib/utils";
-import toast from "react-hot-toast";
+} from "@/components/ui/dialog"; // Dialog components from a custom UI library
+import toast from "react-hot-toast"; // Toast notifications library
 import {
   Command,
   CommandGroup,
   CommandItem,
   CommandList,
-} from "@/components/ui/command";
-import { Badge } from "@/components/ui/badge";
-import { X } from "lucide-react";
-import { Combobox } from "@/components/ui/combobox";
-import { Field } from "@/components/field";
+} from "@/components/ui/command"; // Command components from a custom UI library
+import { Badge } from "@/components/ui/badge"; // Badge component from a custom UI library
+import { X } from "lucide-react"; // X icon from lucide-react
+import { Combobox } from "@/components/ui/combobox"; // Combobox component from a custom UI library
+import { formSchema } from "./_components/formSchema"; // Import form schema from a local module
+import useFormWithEducationSchema from "./_components/ufwes"; // Custom hook for using form with education schema
+import useEducationForm from "./_components/hooks"; // Custom hook for education form logic
+import { ethnic, month, programs } from "./_components/dataset"; // Importing datasets from local module
+import { options } from "./_components/options"; // Importing options from local module
+import {
+  isCyclic,
+  localStorageUtil,
+  preprocessGrades,
+  isAggregatePassing,
+} from "@/lib/utils"; // Import utility functions from a custom library
 
-const optional = <T extends z.ZodTypeAny>(schema: T) => {
-  return z
-    .union([schema, z.literal("")])
-    .transform((value) => (value === "" ? undefined : value))
-    .optional();
-};
+// Define types for the form options
+type Option = Record<"value" | "label", string>; // Defines an Option type with value and label properties as strings
 
-type Option = Record<"value" | "label", string>;
+// Define types for form values
+interface FormValues {
+  skill: string[]; // Array of strings representing skills
+  interest: string[]; // Array of strings representing interests
+  regionOfSchool: string; // String representing the region of school
+  typeOfUni: string; // String representing the type of university
+}
 
-const formSchema = z.object({
-  day: z.string().min(1),
-  month: z.string().min(1),
-  year: z.string().min(1),
-  ethnic: z.string().min(1),
-  gender: z.string().min(1),
-  hsgradYear: z.string().min(1),
-  currAttending: z.string().min(1),
-  programmes: z.string().min(1),
-  alprogrammes: optional(z.string().min(1)),
-  hsprogrammes: optional(z.string().min(1)),
-  engLangGrade: z.string().min(1),
-  socStuGrade: z.string().min(1),
-  mathGrade: z.string().min(1),
-  interScienceGrade: z.string().min(1),
-  regionOfSchool: z.string().min(1),
-  typeOfUni: z.string().min(1),
-  skill: z.array(z.string().min(1)),
-  interest: z.array(z.string().min(1)),
-});
+// Define the structure of API response
+interface ApiResponse {
+  careers: any[]; // Array of any type representing careers
+  majors: any[]; // Array of any type representing majors
+  unis: any[]; // Array of any type representing universities
+  skills: any[]; // Array of any type representing skills
+  interests: any[]; // Array of any type representing interests
+}
 
 const Assessment = () => {
-  const { isSignedIn, user, isLoaded } = useUser();
+  // Destructure isSignedIn and user from useUser hook to get user authentication status and user information
+  const { isSignedIn, user } = useUser();
+
+  // Get the router object for navigation
   const router = useRouter();
-  const { setCareerRecommendation, setMajorRecommendation, setUnis } =
-    useGlobalContext();
-  const [isNotAttending, setIsNotAttending] = useState(false);
-  const [isHS, setIsHS] = useState(false);
-  const [is4Y, setIs4Y] = useState(false);
-  const [isIsAlternative, setIsAlternative] = useState(false);
-  const [isModal, setIsModal] = useState(false);
-  const [loading, setLoading] = useState(false);
 
-  const skillInputRef = useRef<HTMLInputElement>(null);
-  const [skillOpen, setSkillOpen] = useState(false);
-  const [selectedSkills, setSelectedSkills] = useState<Option[]>([]);
-  const [skills, setSkills] = useState<(string | undefined)[]>([]);
-  const [skillInputValue, setSkillInputValue] = useState("");
+  // Initialize the form with a custom hook that uses a specific education schema
+  const form = useFormWithEducationSchema();
 
-  const interestInputRef = useRef<HTMLInputElement>(null);
-  const [interestOpen, setInterestOpen] = useState(false);
-  const [selectedInterests, setSelectedInterests] = useState<Option[]>([]);
-  const [interests, setInterests] = useState<(string | undefined)[]>([]);
-  const [interestInputValue, setInterestInputValue] = useState("");
+  // Destructure various states and functions from the custom useEducationForm hook
+  const { formState, subjectsAndElectives, skills, interests, refs } =
+    useEducationForm();
 
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const closeRef = useRef<HTMLButtonElement | null>(null);
+  // Function to handle the status of grades
+  const handleStatus = (updatedGrades: any) => {
+    // Preprocess the grades
+    const gradeProcessed = preprocessGrades(updatedGrades);
 
-  const form = useForm<z.infer<typeof formSchema>>({
-    resolver: zodResolver(formSchema),
-    defaultValues: {
-      day: "",
-      month: "",
-      year: "",
-      ethnic: "",
-      gender: "",
-      hsgradYear: "",
-      currAttending: "",
-      programmes: "",
-      hsprogrammes: "",
-      alprogrammes: "",
-      engLangGrade: "",
-      socStuGrade: "",
-      mathGrade: "",
-      interScienceGrade: "",
-      regionOfSchool: "",
-      typeOfUni: "",
-      skill: [],
-      interest: [],
-    },
+    // Check if the aggregate passing condition is met
+    const aggregatePassing = isAggregatePassing(gradeProcessed);
+
+    // Update the form state status based on the aggregate passing condition
+    formState.setStatus(aggregatePassing);
+  };
+
+  // Create a debounced version of the handleStatus function to delay its execution by 10000ms (10 seconds)
+  const debouncedFetch = useCallback(
+    debounce((updatedGrades: any) => handleStatus(updatedGrades), 10000),
+    [] // Dependencies array, empty means it will be created only once
+  );
+
+  // Function to handle changes in grades
+  const handleGradeChange = (value: string, name: string) => {
+    // Update the grades state with the new value
+    const updatedGrades = { ...formState.grades, [name]: value };
+    formState.setGrades(updatedGrades);
+
+    // Call the debounced fetch function
+    debouncedFetch(updatedGrades);
+  };
+
+  // Function to handle changes in attendance status
+  const handleAttendanceChange = (value: string) => {
+    // Update form state based on the attendance status
+    formState.setIsNotAttending(value === "not attending school");
+    formState.setIsHS(value === "high school");
+    formState.setIs4Y(value === "4 year college");
+
+    // If the value is "4 year college", return early
+    if (value === "4 year college") {
+      return;
+    }
+
+    // Otherwise, reset various form states and fields
+    formState.setIs4Y(false);
+    formState.setIsAlternative(false);
+    formState.setIsModal(false);
+    form.resetField("programs");
+    form.resetField("alprograms");
+    form.resetField("hsprograms");
+  };
+
+  // Function to handle changes in selected programs
+  const handlePrograms = (value: string) => {
+    // Find the program that matches the selected value
+    const [program] = programs.filter((pg) => pg.name === value);
+
+    // Update subjects and electives based on the selected program
+    subjectsAndElectives.setSubjects(program.subjects);
+    subjectsAndElectives.setElectives(program.electives);
+
+    // If the form state indicates a 4-year college, update modal state based on program options
+    if (formState.is4Y) {
+      const programsOptions = programs.map((p) => p.name);
+      const isAlternative = programsOptions.includes(value);
+      formState.setIsModal(isAlternative);
+    }
+  };
+
+  // Function to handle the "Yes" button click
+  const onClickYes = () => {
+    // Update form state to indicate an alternative program and close the modal
+    formState.setIsAlternative(true);
+    formState.setIsModal(false);
+  };
+
+  // Use effect to handle modal visibility based on form state
+  useEffect(() => {
+    if (formState.isModal) {
+      refs.buttonRef.current?.click(); // Open the modal if isModal is true
+    } else {
+      refs.closeRef.current?.click(); // Close the modal if isModal is false
+    }
+  }, [formState.isModal]);
+
+  // Use effect to handle informational modal visibility based on form state status
+  useEffect(() => {
+    if (!formState.status) {
+      refs.infoRef.current?.click(); // Open the informational modal if status is false
+    }
+  }, [formState.status]);
+
+  // Function to create event handlers for skill and interest selection
+  const createHandlers = (
+    // State containing a reference to the input element
+    state: { inputRef: { current: any } },
+    // Function to update the state
+    setState: (arg0: {
+      (prev: { selected: any[]; options: any[] }): {
+        selected: any[];
+        options: any[];
+      };
+      (prev: any): any;
+    }) => void,
+    // Form field name to be updated
+    formField: any
+  ) => ({
+    // Event handler for unselecting an option
+    handleUnselect: useCallback((option: Option) => {
+      // Update the state by filtering out the unselected option from selected and options arrays
+      setState((prev: { selected: any[]; options: any[] }) => ({
+        ...prev,
+        selected: prev.selected.filter((s) => s.value !== option.value),
+        options: prev.options.filter((s) => s !== option.value),
+      }));
+      // Update the form field by removing the unselected option from its value
+      form.setValue(
+        formField,
+        form.getValues(formField).filter((s: string) => s !== option.value)
+      );
+    }, []),
+
+    // Event handler for key down events
+    handleKeyDown: useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
+      const input = state.inputRef.current;
+      if (input) {
+        // If Delete or Backspace is pressed and input is empty, remove the last selected item
+        if (
+          (e.key === "Delete" || e.key === "Backspace") &&
+          input.value === ""
+        ) {
+          setState((prev) => ({
+            ...prev,
+            selected: prev.selected.slice(0, -1),
+          }));
+        }
+        // If Escape is pressed, blur the input
+        if (e.key === "Escape") {
+          input.blur();
+        }
+      }
+    }, []),
   });
 
-  const daysOfMonthOptions = daysOfMonth.map((day) => ({
-    label: day.toString(),
-    value: day.toString(),
-  }));
+  // Create event handlers for skills selection
+  const skillHandlers = createHandlers(skills, skills.setSelected, "skill");
 
-  const yearOptions = years.map((year) => ({
-    label: year.toString(),
-    value: year.toString(),
-  }));
+  // Create event handlers for interests selection
+  const interestHandlers = createHandlers(
+    interests,
+    interests.setSelected,
+    "interest"
+  );
 
-  const gradYearOptions = graduationYears.map((year) => ({
-    label: year.toString(),
-    value: year.toString(),
-  }));
+  // Filter options for selectable skills, excluding already selected skills
+  const selectablesSkills = options.collegeSkills.filter(
+    (option: { value: string }) =>
+      !skills.selected.some((selected) => selected.value === option.value)
+  );
 
-  const currentlyAttendingOptions = currentlyAttending.map((curr) => ({
-    label: curr.label,
-    value: curr.value,
-  }));
+  // Filter options for selectable interests, excluding already selected interests
+  const selectablesInterests = options.interestingCareers.filter(
+    (option: { value: string }) =>
+      !interests.selected.some((selected) => selected.value === option.value)
+  );
 
-  const programmesOptions = Programmes.map((p) => ({
-    label: p.program,
-    value: p.program,
-  }));
-
-  const optionalProgrammesOptions = Programmes.map((p) => ({
-    label: p.program,
-    value: p.program,
-  }));
-
-  const hsprogrammesOptions = HSProgrammes.map((hsprogram) => ({
-    label: hsprogram.program,
-    value: hsprogram.program,
-  }));
-
-  const gradeOptions = grades.map((grade) => ({
-    label: grade,
-    value: grade,
-  }));
-
-  const regionOptions = ghanaRegions.map((region) => ({
-    label: region.label,
-    value: region.value,
-  }));
-
-  const unisType = typeUnis.map((type) => ({
-    label: type.label,
-    value: type.value,
-  }));
-
-  const skill = collegeSkills.map((skill) => ({
-    label: skill.label,
-    value: skill.value,
-  }));
-
-  const interest = interestingCareers.map((interest) => ({
-    label: interest.toString(),
-    value: interest.toString(),
-  }));
-
-  const handleAttendingChange = (value: string) => {
-    setIsNotAttending(value === "not attending school" ? true : false);
-    setIsHS(value === "high school" ? true : false);
-    setIs4Y(value === "4 year college");
-    if (value !== "4 year college") {
-      setIs4Y(false);
-      setIsAlternative(false);
-      setIsModal(false);
-    }
-    form.resetField("programmes");
-    form.resetField("alprogrammes");
-    form.resetField("hsprogrammes");
-  };
-
-  const handleProgrammes = (value: string) => {
-    if (is4Y) {
-      const programsOptions = Programmes.map((p) => p.program);
-      const isAlternative = programsOptions.includes(value);
-      setTimeout(() => {
-        setIsModal(isAlternative);
-      }, 1000);
-    }
-  };
-
-  const onClickYes = () => {
-    setIsAlternative(true);
-    setIsModal(false);
-  };
-
-  useEffect(() => {
-    if (isModal && buttonRef.current) {
-      buttonRef.current.click();
-    }
-  }, [isModal]);
-
-  useEffect(() => {
-    if (!isModal && closeRef.current) {
-      closeRef.current.click();
-    }
-  }, [isModal]);
-
-  const handleSkillUnselect = useCallback((option: Option) => {
-    setSelectedSkills((prev) => prev.filter((s) => s.value !== option.value));
-    setSkills((prev) => prev.filter((s) => s !== option.value));
-    form.setValue(
-      "skill",
-      form.getValues("skill").filter((s) => s !== option.value)
-    ); // Update form value
-  }, []);
-
-  const handleSkillKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
-      const input = skillInputRef.current;
-      if (input) {
-        if (e.key === "Delete" || e.key === "Backspace") {
-          if (input.value === "") {
-            setSelectedSkills((prev) => {
-              const newSelected = [...prev];
-              newSelected.pop();
-              return newSelected;
-            });
-          }
-        }
-        // This is not a default behaviour of the <input /> field
-        if (e.key === "Escape") {
-          input.blur();
-        }
+  // Function to post recommendation data to the server
+  const postRecommendation = async (data: FormValues): Promise<ApiResponse> => {
+    // Send a POST request to the server with the recommendation data
+    const response = await axios.post(
+      "api/recommendation", // Endpoint for the recommendation API
+      JSON.stringify(data), // Data to be sent in the request body, converted to JSON string
+      {
+        headers: { "Content-Type": "application/json" }, // Set the request headers
       }
-    },
-    []
-  );
-
-  const selectablesSkills = skill.filter(
-    (option) =>
-      !selectedSkills.some((selected) => selected.value === option.value)
-  );
-
-  const handleInterestUnselect = useCallback((option: Option) => {
-    setSelectedInterests((prev) =>
-      prev.filter((s) => s.value !== option.value)
     );
-    setInterests((prev) => prev.filter((s) => s !== option.value));
-    form.setValue(
-      "interest",
-      form.getValues("interest").filter((s) => s !== option.value)
-    ); // Update form value
-  }, []);
+    // Return the response data from the server
+    return response.data;
+  };
 
-  const handleInterestKeyDown = useCallback(
-    (e: React.KeyboardEvent<HTMLDivElement>) => {
-      const input = interestInputRef.current;
-      if (input) {
-        if (e.key === "Delete" || e.key === "Backspace") {
-          if (input.value === "") {
-            setSelectedInterests((prev) => {
-              const newSelected = [...prev];
-              newSelected.pop();
-              return newSelected;
-            });
-          }
-        }
-        // This is not a default behaviour of the <input /> field
-        if (e.key === "Escape") {
-          input.blur();
-        }
-      }
-    },
-    []
-  );
-
-  const selectablesInterests = interest.filter(
-    (option) =>
-      !selectedInterests.some((selected) => selected.value === option.value)
-  );
-
-  const { isSubmitting, isValid } = form.formState;
-
-  const onSubmit = async (values: z.infer<typeof formSchema>) => {
-    const skill = values.skill;
-    const interest = values.interest;
-    const school = values.regionOfSchool;
-    const type = values.typeOfUni;
+  // Function to handle form submission
+  const onSubmit = async (values: FormValues) => {
     try {
-      setLoading(true);
+      // Set the loading state to true
+      formState.setLoading(true);
 
-      const response = await axios.post(
-        "api/recommendation",
-        JSON.stringify({ skill, interest, school, type }),
-        {
-          headers: {
-            "Content-Type": "application/json",
-          },
-        }
-      );
-      const { careers, majors, unis, skills, interests } = response.data;
+      // Post the recommendation data and destructure the response
+      const { careers, majors, unis, skills, interests } =
+        await postRecommendation(values);
 
-      const saveArrayToLocalStorage = (key: string, array: any) => {
-        try {
-          if (array === undefined || array === null) {
-            console.error(
-              `Cannot save ${key} to localStorage because it is undefined or null.`
-            );
-            return;
-          }
-
-          const json = JSON.stringify(array);
-          localStorage.setItem(key, json);
-        } catch (error) {
-          console.error(`Error saving ${key} to localStorage:`, error);
-        }
-      };
-
-      const isCyclic = (obj: any, seen = new Set()) => {
-        if (obj && typeof obj === "object") {
-          if (seen.has(obj)) {
-            return true;
-          }
-          seen.add(obj);
-          for (let key in obj) {
-            if (obj.hasOwnProperty(key) && isCyclic(obj[key], seen)) {
-              return true;
-            }
-          }
-          seen.delete(obj);
-        }
-        return false;
-      };
-
-      // Check if the variables are defined and not null
+      // Check for cyclic references in the data
       if (!isCyclic(careers) && !isCyclic(majors) && !isCyclic(unis)) {
-        saveArrayToLocalStorage(
-          "CareerRecommendationWithSimilarityAboveZero",
-          careers
-        );
-        saveArrayToLocalStorage(
-          "MajorRecommendationWithSimilarityAboveZero",
-          majors
-        );
-        saveArrayToLocalStorage("UnisWithTypeWithRegion", unis);
-        saveArrayToLocalStorage("SkillsUserChoice", skills);
-        saveArrayToLocalStorage("InterestsUserChoice", interests);
+        // Save the data to local storage if no cyclic references are found
+        localStorageUtil.save("CAREERS", careers);
+        localStorageUtil.save("MAJORS", majors);
+        localStorageUtil.save("UNIS", unis);
+        localStorageUtil.save("SKILLS", skills);
+        localStorageUtil.save("INTERESTS", interests);
 
-        const getArrayFromLocalStorage = (key: string) => {
-          try {
-            const json = localStorage.getItem(key);
-            if (json) {
-              return JSON.parse(json);
-            } else {
-              console.warn(`${key} not found in localStorage.`);
-              return null;
-            }
-          } catch (error) {
-            console.error(`Error retrieving ${key} from localStorage:`, error);
-            return null;
-          }
-        };
-
-        const storedCareer = getArrayFromLocalStorage(
-          "CareerRecommendationWithSimilarityAboveZero"
-        );
-        const storedMajor = getArrayFromLocalStorage(
-          "MajorRecommendationWithSimilarityAboveZero"
-        );
-        const storedUnis = getArrayFromLocalStorage("UnisWithTypeWithRegion");
+        // If careers, majors, and unis data exist, navigate to the result page
+        if (careers && majors && unis) {
+          router.replace("/result");
+        }
       } else {
+        // Log an error if cyclic references are detected
         console.error(
-          "One or more of the data arrays contain cyclic references and cannot be saved to localStorage."
+          "Cyclic references detected in data, cannot save to localStorage."
         );
       }
-
-      if (careers && majors && unis) {
-        router.replace("/result");
-      }
-
-      setTimeout(() => {
-        setLoading(false);
-      }, 2000);
     } catch (error) {
-      setLoading(false);
-      toast.error("Something went wrong"); // Showing an error toast notification
+      // Log any errors that occur during form submission
+      console.error("Error submitting form:", error);
+      // Show a toast notification to the user
+      toast.error("Something went wrong");
+    } finally {
+      // Set the loading state to false
+      formState.setLoading(false);
     }
   };
 
@@ -463,13 +341,13 @@ const Assessment = () => {
                         <div className="p-2 grid grid-cols-5 gap-4">
                           <FormField
                             control={form.control}
-                            name="day"
+                            name="dateOfBirth.day"
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>Day</FormLabel>
                                 <FormControl>
                                   <Combobox
-                                    options={daysOfMonthOptions}
+                                    options={options.daysOfMonth}
                                     {...field}
                                   />
                                 </FormControl>
@@ -481,7 +359,7 @@ const Assessment = () => {
 
                           <FormField
                             control={form.control}
-                            name="month"
+                            name="dateOfBirth.month"
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>Month</FormLabel>
@@ -495,12 +373,15 @@ const Assessment = () => {
                           />
                           <FormField
                             control={form.control}
-                            name="year"
+                            name="dateOfBirth.year"
                             render={({ field }) => (
                               <FormItem>
                                 <FormLabel>Year</FormLabel>
                                 <FormControl>
-                                  <Combobox options={yearOptions} {...field} />
+                                  <Combobox
+                                    options={options.years}
+                                    {...field}
+                                  />
                                 </FormControl>
 
                                 <FormMessage className="text-sm" />
@@ -549,14 +430,14 @@ const Assessment = () => {
                         <div className="p-2">
                           <h1 className="font-bold text-2xl ">School Info</h1>
                         </div>
-                        <div className="p-1">Graduation year & Other</div>
+
                         <div
                           className={`p-2 grid gap-4 transition ${
-                            isHS
+                            formState.isHS
                               ? "grid-cols-4"
-                              : isNotAttending
+                              : formState.isNotAttending
                               ? "grid-cols-3"
-                              : isIsAlternative
+                              : formState.isAlternative
                               ? "grid-cols-4"
                               : "grid-cols-3"
                           }`}
@@ -569,7 +450,7 @@ const Assessment = () => {
                                 <FormLabel>HS Graduation year</FormLabel>
                                 <FormControl>
                                   <Combobox
-                                    options={gradYearOptions}
+                                    options={options.graduationYears}
                                     {...field}
                                   />
                                 </FormControl>
@@ -586,11 +467,11 @@ const Assessment = () => {
                                 <FormLabel>Currently Attending</FormLabel>
                                 <FormControl>
                                   <Combobox
-                                    options={currentlyAttendingOptions}
+                                    options={options.currentlyAttending}
                                     {...field}
                                     onChange={(value) => {
                                       field.onChange(value);
-                                      handleAttendingChange(value);
+                                      handleAttendanceChange(value);
                                     }}
                                   />
                                 </FormControl>
@@ -599,16 +480,16 @@ const Assessment = () => {
                               </FormItem>
                             )}
                           />
-                          {isHS && (
+                          {formState.isHS && (
                             <FormField
                               control={form.control}
-                              name="hsprogrammes"
+                              name="hsprograms"
                               render={({ field }) => (
                                 <FormItem>
-                                  <FormLabel>High School Programmes</FormLabel>
+                                  <FormLabel>High School Programs</FormLabel>
                                   <FormControl>
                                     <Combobox
-                                      options={hsprogrammesOptions}
+                                      options={options.HSPrograms}
                                       {...field}
                                     />
                                   </FormControl>
@@ -620,7 +501,7 @@ const Assessment = () => {
                           )}
 
                           <Dialog>
-                            <DialogTrigger asChild ref={buttonRef}>
+                            <DialogTrigger asChild ref={refs.buttonRef}>
                               <Button
                                 type="button"
                                 variant="outline"
@@ -631,12 +512,19 @@ const Assessment = () => {
                             </DialogTrigger>
                             <DialogContent className="sm:max-w-md">
                               <DialogHeader>
-                                <DialogTitle>
-                                  Would you like to add an optional program?
-                                </DialogTitle>
+                                <DialogTitle>CONFIRMATION</DialogTitle>
                               </DialogHeader>
+                              <DialogDescription>
+                                Thank you for providing your information. Based
+                                on what you've shared, we think you might also
+                                be interested in some of our other excellent
+                                programs that could be a great match for your
+                                profile. Would you like to explore these
+                                alternative options? We're here to help you find
+                                the best fit for your goals and qualifications.
+                              </DialogDescription>
                               <DialogFooter>
-                                <DialogClose asChild ref={closeRef}>
+                                <DialogClose asChild ref={refs.closeRef}>
                                   <Button type="button" variant="secondary">
                                     NO
                                   </Button>
@@ -648,19 +536,58 @@ const Assessment = () => {
                             </DialogContent>
                           </Dialog>
 
+                          <Dialog>
+                            <DialogTrigger asChild ref={refs.infoRef}>
+                              <Button
+                                type="button"
+                                variant="outline"
+                                className="hidden"
+                              >
+                                Share
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-md">
+                              <DialogHeader>
+                                <DialogTitle>INFORMATION</DialogTitle>
+                              </DialogHeader>
+                              <DialogDescription>
+                                Thank you for providing your information. We've
+                                reviewed the grades you submitted, and it
+                                appears they may not meet the current
+                                requirements for your chosen program. We
+                                encourage you to double-check your entries for
+                                any unintended errors. If the grades are
+                                correct, please consider exploring our other
+                                program options that might be a great fit for
+                                your qualifications. We're here to help you find
+                                the best path forward.
+                              </DialogDescription>
+                              <DialogFooter>
+                                <DialogClose asChild>
+                                  <Button type="button" variant="secondary">
+                                    CLOSE
+                                  </Button>
+                                </DialogClose>
+                                <DialogClose asChild>
+                                  <Button type="button">REVIEW</Button>
+                                </DialogClose>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+
                           <FormField
                             control={form.control}
-                            name="programmes"
+                            name="programs"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Programmes</FormLabel>
+                                <FormLabel>Programs</FormLabel>
                                 <FormControl>
                                   <Combobox
-                                    options={programmesOptions}
+                                    options={options.programs}
                                     {...field}
                                     onChange={(value) => {
                                       field.onChange(value);
-                                      handleProgrammes(value);
+                                      handlePrograms(value);
                                     }}
                                   />
                                 </FormControl>
@@ -670,16 +597,16 @@ const Assessment = () => {
                             )}
                           />
 
-                          {isIsAlternative && (
+                          {formState.isAlternative && (
                             <FormField
                               control={form.control}
-                              name="alprogrammes"
+                              name="alprograms"
                               render={({ field }) => (
                                 <FormItem>
-                                  <FormLabel>Optional Programmes</FormLabel>
+                                  <FormLabel>Optional Programs</FormLabel>
                                   <FormControl>
                                     <Combobox
-                                      options={optionalProgrammesOptions}
+                                      options={options.optionalPrograms}
                                       {...field}
                                     />
                                   </FormControl>
@@ -691,75 +618,83 @@ const Assessment = () => {
                           )}
                         </div>
 
-                        <div className="p-2 grid grid-cols-4 gap-4">
-                          <FormField
-                            control={form.control}
-                            name="engLangGrade"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>English Language Grade</FormLabel>
-                                <FormControl>
-                                  <Combobox options={gradeOptions} {...field} />
-                                </FormControl>
+                        {subjectsAndElectives.subjects.length > 0 && (
+                          <div className={`p-2 grid grid-cols-4 gap-4`}>
+                            {subjectsAndElectives.subjects.map((subject) => (
+                              <FormField
+                                key={subject}
+                                control={form.control}
+                                name={
+                                  camelCase(subject) as
+                                    | "grades.english"
+                                    | "grades.mathematics"
+                                    | "grades.integratedScience"
+                                    | "grades.socialStudies"
+                                }
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>{subject} Grade</FormLabel>
+                                    <FormControl>
+                                      <Combobox
+                                        options={options.grades}
+                                        value={field.value as string}
+                                        onChange={(value: string) => {
+                                          field.onChange(value);
+                                          handleGradeChange(value, field.name);
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormMessage className="text-sm" />
+                                  </FormItem>
+                                )}
+                              />
+                            ))}
+                          </div>
+                        )}
 
-                                <FormMessage className="text-sm" />
-                              </FormItem>
-                            )}
-                          />
-                          <FormField
-                            control={form.control}
-                            name="socStuGrade"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Social Studies Grade</FormLabel>
-                                <FormControl>
-                                  <Combobox options={gradeOptions} {...field} />
-                                </FormControl>
-
-                                <FormMessage className="text-sm" />
-                              </FormItem>
-                            )}
-                          />
-                          <FormField
-                            control={form.control}
-                            name="mathGrade"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Mathematics Grade</FormLabel>
-                                <FormControl>
-                                  <Combobox options={gradeOptions} {...field} />
-                                </FormControl>
-
-                                <FormMessage className="text-sm" />
-                              </FormItem>
-                            )}
-                          />
-
-                          <FormField
-                            control={form.control}
-                            name="interScienceGrade"
-                            render={({ field }) => (
-                              <FormItem>
-                                <FormLabel>Intergrated Science Grade</FormLabel>
-                                <FormControl>
-                                  <Combobox options={gradeOptions} {...field} />
-                                </FormControl>
-
-                                <FormMessage />
-                              </FormItem>
-                            )}
-                          />
-                        </div>
+                        {subjectsAndElectives.electives.length > 0 && (
+                          <div
+                            className={`p-2 grid grid-cols-${subjectsAndElectives.electives?.length} gap-4`}
+                          >
+                            {subjectsAndElectives.electives.map((elective) => (
+                              <FormField
+                                key={elective}
+                                control={form.control}
+                                name={
+                                  camelCase(elective) as
+                                    | "grades.economics"
+                                    | "grades.electiveMathematics"
+                                    | "grades.literatureInEnglish"
+                                    | "grades.government"
+                                    | "grades.history"
+                                    | "grades.computerStudies"
+                                    | "grades.physics"
+                                    | "grades.chemistry"
+                                    | "grades.businessManagement"
+                                    | "grades.fineArts"
+                                }
+                                render={({ field }) => (
+                                  <FormItem>
+                                    <FormLabel>{elective} Grade</FormLabel>
+                                    <FormControl>
+                                      <Combobox
+                                        options={options.grades}
+                                        value={field.value as string}
+                                        onChange={(value: string) => {
+                                          field.onChange(value);
+                                          handleGradeChange(value, field.name);
+                                        }}
+                                      />
+                                    </FormControl>
+                                    <FormMessage className="text-sm" />
+                                  </FormItem>
+                                )}
+                              />
+                            ))}
+                          </div>
+                        )}
                       </div>
                       <div>
-                        <div className="p-2">
-                          <h1 className="font-bold text-2xl ">Other Info</h1>
-                        </div>
-                        <div className="p-1">Graduation year & Other</div>
-                        <h1 className="font-semibold text-sm my-5 p-2 ">
-                          To find majors offered by colleges that you are more
-                          likely to attend, answer the following questions:
-                        </h1>
                         <div className=" grid grid-cols-4 gap-4 p-2">
                           <FormField
                             control={form.control}
@@ -769,7 +704,7 @@ const Assessment = () => {
                                 <FormLabel>Region to school</FormLabel>
                                 <FormControl>
                                   <Combobox
-                                    options={regionOptions}
+                                    options={options.ghanaRegions}
                                     {...field}
                                   />
                                 </FormControl>
@@ -785,7 +720,10 @@ const Assessment = () => {
                               <FormItem>
                                 <FormLabel>Type of university</FormLabel>
                                 <FormControl>
-                                  <Combobox options={unisType} {...field} />
+                                  <Combobox
+                                    options={options.typeUnis}
+                                    {...field}
+                                  />
                                 </FormControl>
 
                                 <FormMessage />
@@ -800,12 +738,12 @@ const Assessment = () => {
                                 <FormLabel>Skill</FormLabel>
                                 <FormControl>
                                   <Command
-                                    onKeyDown={handleSkillKeyDown}
+                                    onKeyDown={skillHandlers.handleKeyDown}
                                     className="overflow-visible bg-transparent"
                                   >
                                     <div className="group rounded-md border border-input px-3 py-3 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
                                       <div className="flex flex-wrap gap-1">
-                                        {selectedSkills.map((option) => {
+                                        {skills.selected.map((option) => {
                                           return (
                                             <Badge
                                               key={option.value}
@@ -816,7 +754,9 @@ const Assessment = () => {
                                                 className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                                 onKeyDown={(e) => {
                                                   if (e.key === "Enter") {
-                                                    handleSkillUnselect(option);
+                                                    skillHandlers.handleUnselect(
+                                                      option
+                                                    );
                                                   }
                                                 }}
                                                 onMouseDown={(e) => {
@@ -824,7 +764,9 @@ const Assessment = () => {
                                                   e.stopPropagation();
                                                 }}
                                                 onClick={() =>
-                                                  handleSkillUnselect(option)
+                                                  skillHandlers.handleUnselect(
+                                                    option
+                                                  )
                                                 }
                                               >
                                                 <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
@@ -834,14 +776,14 @@ const Assessment = () => {
                                         })}
                                         {/* Avoid having the "Search" Icon */}
                                         <CommandPrimitive.Input
-                                          ref={skillInputRef}
-                                          value={skillInputValue}
+                                          ref={skills.inputRef}
+                                          value={skills.inputValue}
                                           onValueChange={(value) => {
-                                            setSkillInputValue(value);
+                                            skills.setInputValue(value);
                                             field.onChange(value); // Integrate form control onChange
                                           }}
-                                          onBlur={() => setSkillOpen(false)}
-                                          onFocus={() => setSkillOpen(true)}
+                                          onBlur={() => skills.setOpen(false)}
+                                          onFocus={() => skills.setOpen(true)}
                                           placeholder={"Select skills..."}
                                           className="ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
                                         />
@@ -849,12 +791,15 @@ const Assessment = () => {
                                     </div>
                                     <div className="relative mt-2">
                                       <CommandList>
-                                        {skillOpen &&
+                                        {skills.open &&
                                         selectablesSkills.length > 0 ? (
                                           <div className="relative bottom-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in max-h-30 overflow-y-auto">
                                             <CommandGroup className="h-full overflow-auto">
                                               {selectablesSkills.map(
-                                                (option) => {
+                                                (option: {
+                                                  value: any;
+                                                  label: any;
+                                                }) => {
                                                   return (
                                                     <CommandItem
                                                       key={option.value}
@@ -863,19 +808,23 @@ const Assessment = () => {
                                                         e.stopPropagation();
                                                       }}
                                                       onSelect={(value) => {
-                                                        setSkillInputValue("");
-                                                        setSelectedSkills(
+                                                        skills.setInputValue(
+                                                          ""
+                                                        );
+                                                        skills.setSelected(
                                                           (prev) => [
                                                             ...prev,
                                                             option,
                                                           ]
                                                         );
-                                                        setSkills((prev) => [
-                                                          ...prev,
-                                                          option.value,
-                                                        ]);
+                                                        skills.setOptions(
+                                                          (prev) => [
+                                                            ...prev,
+                                                            option.value,
+                                                          ]
+                                                        );
                                                         field.onChange([
-                                                          ...skills,
+                                                          ...skills.options,
                                                           option.value,
                                                         ]);
                                                       }}
@@ -909,12 +858,12 @@ const Assessment = () => {
                                 <FormLabel>Interest</FormLabel>
                                 <FormControl>
                                   <Command
-                                    onKeyDown={handleInterestKeyDown}
+                                    onKeyDown={interestHandlers.handleKeyDown}
                                     className="overflow-visible bg-transparent "
                                   >
                                     <div className="group rounded-md border border-input px-3 py-3 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
                                       <div className="flex flex-wrap gap-1">
-                                        {selectedInterests.map((option) => {
+                                        {interests.selected.map((option) => {
                                           return (
                                             <Badge
                                               key={option.value}
@@ -925,7 +874,7 @@ const Assessment = () => {
                                                 className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
                                                 onKeyDown={(e) => {
                                                   if (e.key === "Enter") {
-                                                    handleInterestUnselect(
+                                                    interestHandlers.handleUnselect(
                                                       option
                                                     );
                                                   }
@@ -935,7 +884,9 @@ const Assessment = () => {
                                                   e.stopPropagation();
                                                 }}
                                                 onClick={() =>
-                                                  handleInterestUnselect(option)
+                                                  interestHandlers.handleUnselect(
+                                                    option
+                                                  )
                                                 }
                                               >
                                                 <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
@@ -945,14 +896,18 @@ const Assessment = () => {
                                         })}
                                         {/* Avoid having the "Search" Icon */}
                                         <CommandPrimitive.Input
-                                          ref={interestInputRef}
-                                          value={interestInputValue}
+                                          ref={interests.inputRef}
+                                          value={interests.inputValue}
                                           onValueChange={(value) => {
-                                            setSkillInputValue(value);
+                                            interests.setInputValue(value);
                                             field.onChange(value); // Integrate form control onChange
                                           }}
-                                          onBlur={() => setInterestOpen(false)}
-                                          onFocus={() => setInterestOpen(true)}
+                                          onBlur={() =>
+                                            interests.setOpen(false)
+                                          }
+                                          onFocus={() =>
+                                            interests.setOpen(true)
+                                          }
                                           placeholder={"Select Interests..."}
                                           className="ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
                                         />
@@ -960,7 +915,7 @@ const Assessment = () => {
                                     </div>
                                     <div className="relative mt-2">
                                       <CommandList>
-                                        {interestOpen &&
+                                        {interests.open &&
                                         selectablesInterests.length > 0 ? (
                                           <div className="relative bottom-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in max-h-30 overflow-y-auto">
                                             <CommandGroup>
@@ -974,21 +929,23 @@ const Assessment = () => {
                                                         e.stopPropagation();
                                                       }}
                                                       onSelect={(value) => {
-                                                        setInterestInputValue(
+                                                        interests.setInputValue(
                                                           ""
                                                         );
-                                                        setSelectedInterests(
+                                                        interests.setSelected(
                                                           (prev) => [
                                                             ...prev,
                                                             option,
                                                           ]
                                                         );
-                                                        setInterests((prev) => [
-                                                          ...prev,
-                                                          option.value,
-                                                        ]);
+                                                        interests.setOptions(
+                                                          (prev) => [
+                                                            ...prev,
+                                                            option.value,
+                                                          ]
+                                                        );
                                                         field.onChange([
-                                                          ...interests,
+                                                          ...interests.options,
                                                           option.value,
                                                         ]);
                                                       }}
@@ -1018,10 +975,56 @@ const Assessment = () => {
                     </div>
 
                     <div className="flex justify-center p-5">
-                      {loading ? (
+                      {formState.loading ? (
                         <HashLoader color="#000" size={40} />
                       ) : (
-                        <Button type="submit">Begin the assessment</Button>
+                        <>
+                          <Dialog>
+                            <DialogTrigger asChild>
+                              <Button
+                                type="button"
+                                disabled={formState.status ? false : true}
+                              >
+                                Begin the assessment
+                              </Button>
+                            </DialogTrigger>
+                            <DialogContent className="sm:max-w-md">
+                              <DialogHeader>
+                                <DialogTitle>CONFIRMATION</DialogTitle>
+                              </DialogHeader>
+                              <DialogDescription>
+                                Thank you for providing your information! Are
+                                you satisfied with the details you've entered so
+                                far? If everything looks good, can we proceed
+                                with the assessment?
+                              </DialogDescription>
+                              <DialogFooter>
+                                <DialogClose asChild>
+                                  <Button type="button" variant="secondary">
+                                    Edit Information
+                                  </Button>
+                                </DialogClose>
+                                <DialogClose asChild>
+                                  <Button
+                                    type="button"
+                                    onClick={() =>
+                                      refs.submitRef.current?.click()
+                                    }
+                                  >
+                                    Proceed to Assessment
+                                  </Button>
+                                </DialogClose>
+                              </DialogFooter>
+                            </DialogContent>
+                          </Dialog>
+                          <Button
+                            type="submit"
+                            className="hidden"
+                            ref={refs.submitRef}
+                          >
+                            Begin the assessment
+                          </Button>
+                        </>
                       )}
                     </div>
                   </form>

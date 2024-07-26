@@ -1,20 +1,8 @@
 import { useEffect, useRef, useState } from "react";
 
-import {
-  Dialog,
-  DialogClose,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/components/ui/dialog";
-import { Button } from "@/components/ui/button";
-
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 
-type MajorRecommendationWithSimilarityAboveZero = {
+type MAJOR = {
   name: string;
   description: string;
   similarity: number;
@@ -22,37 +10,28 @@ type MajorRecommendationWithSimilarityAboveZero = {
   careers: string[];
 };
 
-type UserSkillsOrInterests = string[];
+type SKILLSORINTERESETS = string[];
 
 export default function Major() {
-  const [majors, setMajors] = useState<
-    MajorRecommendationWithSimilarityAboveZero[]
-  >([]);
-  const [requestedMajor, setRequestedMajor] =
-    useState<MajorRecommendationWithSimilarityAboveZero | null>();
-  const [skills, setSkills] = useState<UserSkillsOrInterests[]>([]);
+  const [majors, setMajors] = useState<MAJOR[]>([]);
+  const [requestedMajor, setRequestedMajor] = useState<MAJOR | null>();
+  const [skills, setSkills] = useState<SKILLSORINTERESETS[]>([]);
 
-  const [interests, setInterests] = useState<UserSkillsOrInterests[]>([]);
+  const [interests, setInterests] = useState<SKILLSORINTERESETS[]>([]);
 
   const [active, setActive] = useState();
-
-  const buttonRef = useRef<HTMLButtonElement | null>(null);
-  const closeRef = useRef<HTMLButtonElement | null>(null);
 
   const [isModal, setIsModal] = useState(false);
 
   useEffect(() => {
-    const Unparsed: any = localStorage.getItem(
-      "MajorRecommendationWithSimilarityAboveZero"
-    );
-    const unparsedUserSkills: any = localStorage.getItem("SkillsUserChoice");
-    const unparsedUserInterests: any = localStorage.getItem(
-      "InterestsUserChoice"
-    );
+    const Unparsed: string | null = localStorage.getItem("MAJORS");
+    const unparsedUserSkills: string | null = localStorage.getItem("SKILLS");
+    const unparsedUserInterests: string | null =
+      localStorage.getItem("INTERESTS");
 
-    const skills = JSON.parse(unparsedUserSkills);
-    const interests = JSON.parse(unparsedUserInterests);
-    const majors = JSON.parse(Unparsed);
+    const skills = JSON.parse(unparsedUserSkills as string);
+    const interests = JSON.parse(unparsedUserInterests as string);
+    const majors = JSON.parse(Unparsed as string);
     setSkills(skills);
     setInterests(interests);
 
@@ -90,21 +69,19 @@ export default function Major() {
 
           {/* Displaying a list of career names */}
           <ul className="grid grid-cols-2" data-testid="list-container">
-            {majors?.map(
-              (item: MajorRecommendationWithSimilarityAboveZero, i: number) => (
-                <li
-                  key={i}
-                  className={
-                    active === i
-                      ? "p-2 rounded-sm bg-[#F1F2F2] w-5 cursor-pointer"
-                      : "p-2 rounded-sm hover:bg-[#F1F2F2] w-5 cursor-pointer"
-                  }
-                  onClick={() => getMajor(item.name, i)}
-                >
-                  <p className="text-sm font-semibold">{item.name}</p>
-                </li>
-              )
-            )}
+            {majors?.map((item: MAJOR, i: number) => (
+              <li
+                key={i}
+                className={
+                  active === i
+                    ? "p-2 rounded-sm bg-[#F1F2F2] w-5 cursor-pointer"
+                    : "p-2 rounded-sm hover:bg-[#F1F2F2] w-5 cursor-pointer"
+                }
+                onClick={() => getMajor(item.name, i)}
+              >
+                <p className="text-sm font-semibold">{item.name}</p>
+              </li>
+            ))}
           </ul>
           {isModal && (
             <div>
