@@ -176,7 +176,7 @@ const Assessment = () => {
   }, [formState.status]);
 
   // Function to create event handlers for skill and interest selection
-  const createHandlers = (
+  const useCreateHandlers = (
     // State containing a reference to the input element
     state: { inputRef: { current: any } },
     // Function to update the state
@@ -228,10 +228,10 @@ const Assessment = () => {
   });
 
   // Create event handlers for skills selection
-  const skillHandlers = createHandlers(skills, skills.setSelected, "skill");
+  const skillHandlers = useCreateHandlers(skills, skills.setSelected, "skill");
 
   // Create event handlers for interests selection
-  const interestHandlers = createHandlers(
+  const interestHandlers = useCreateHandlers(
     interests,
     interests.setSelected,
     "interest"
@@ -516,11 +516,11 @@ const Assessment = () => {
                               </DialogHeader>
                               <DialogDescription>
                                 Thank you for providing your information. Based
-                                on what you've shared, we think you might also
+                                on what you&apos;ve shared, we think you might also
                                 be interested in some of our other excellent
                                 programs that could be a great match for your
                                 profile. Would you like to explore these
-                                alternative options? We're here to help you find
+                                alternative options? We&apos;re here to help you find
                                 the best fit for your goals and qualifications.
                               </DialogDescription>
                               <DialogFooter>
@@ -551,7 +551,7 @@ const Assessment = () => {
                                 <DialogTitle>INFORMATION</DialogTitle>
                               </DialogHeader>
                               <DialogDescription>
-                                Thank you for providing your information. We've
+                                Thank you for providing your information. We&apos;ve
                                 reviewed the grades you submitted, and it
                                 appears they may not meet the current
                                 requirements for your chosen program. We
@@ -559,7 +559,7 @@ const Assessment = () => {
                                 any unintended errors. If the grades are
                                 correct, please consider exploring our other
                                 program options that might be a great fit for
-                                your qualifications. We're here to help you find
+                                your qualifications. We&apos;re here to help you find
                                 the best path forward.
                               </DialogDescription>
                               <DialogFooter>
@@ -994,7 +994,7 @@ const Assessment = () => {
                               </DialogHeader>
                               <DialogDescription>
                                 Thank you for providing your information! Are
-                                you satisfied with the details you've entered so
+                                you satisfied with the details you&apos;ve entered so
                                 far? If everything looks good, can we proceed
                                 with the assessment?
                               </DialogDescription>
