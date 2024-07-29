@@ -178,7 +178,7 @@ const Assessment = () => {
 
   // Use effect to handle informational modal visibility based on form state status
   useEffect(() => {
-    if (!formState.status | formState.status) {
+    if (!formState.status || formState.status) {
       refs.infoRef.current?.click(); // Open the informational modal if status is false or true
     }
   }, [formState.status]);
