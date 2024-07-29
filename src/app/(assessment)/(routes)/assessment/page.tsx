@@ -178,7 +178,9 @@ const Assessment = () => {
 
   // Use effect to handle informational modal visibility based on form state status
   useEffect(() => {
-    refs.infoRef.current?.click(); // Open the informational modal if status is false or true
+    if (!formState.status | formState.status) {
+      refs.infoRef.current?.click(); // Open the informational modal if status is false or true
+    }
   }, [formState.status]);
 
   // Function to create event handlers for skill and interest selection
@@ -557,16 +559,22 @@ const Assessment = () => {
                                 <DialogTitle>INFORMATION</DialogTitle>
                               </DialogHeader>
                               <DialogDescription>
-                                {`Thank you for providing your information. We&apos;ve
+                                { formState.status ? `Thank you for providing your information. We&apos;ve
                                 reviewed the grades you submitted, and it
-                                appears they ${!formState.status &&`did not`} meet the current
-                                requirements for your chosen program. ${!formState.status &&`We
+                                appears they meet the current
+                                requirements for your chosen program. We
+                                encourage you to double-check your entries for
+                                any unintended errors. We&apos;re here to help you find
+                                the best path forward.`:`Thank you for providing your information. We&apos;ve
+                                reviewed the grades you submitted, and it
+                                appears they did not meet the current
+                                requirements for your chosen program. We
                                 encourage you to double-check your entries for
                                 any unintended errors. If the grades are
                                 correct, please consider exploring our other
                                 program options that might be a great fit for
-                                your qualifications`} . We&apos;re here to help you find
-                                the best path forward.`}
+                                your qualifications . We&apos;re here to help you find
+                                the best path forward.` }
                               </DialogDescription>
                               <DialogFooter>
                               {!formState.status && <DialogClose asChild>
