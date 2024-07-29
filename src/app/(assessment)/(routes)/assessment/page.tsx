@@ -100,7 +100,7 @@ const Assessment = () => {
 
   // Create a debounced version of the handleStatus function to delay its execution by 10000ms (10 seconds)
   const debouncedFetch = useCallback(
-    debounce((updatedGrades: any) => handleStatus(updatedGrades), 10000),
+    debounce((updatedGrades: any) => handleStatus(updatedGrades), 5000),
     [] // Dependencies array, empty means it will be created only once
   );
 
@@ -110,7 +110,7 @@ const Assessment = () => {
     const updatedGrades = { ...formState.grades, [name]: value };
     formState.setGrades(updatedGrades);
 
-    // Call the debounced fetch function
+    // handle the status of grades
     debouncedFetch(updatedGrades);
   };
 
@@ -135,21 +135,29 @@ const Assessment = () => {
     form.resetField("hsprograms");
   };
 
-  // Function to handle changes in selected programs
-  const handlePrograms = (value: string) => {
-    // Find the program that matches the selected value
+  const programFilter = (value: string) => {
     const [program] = programs.filter((pg) => pg.name === value);
 
     // Update subjects and electives based on the selected program
     subjectsAndElectives.setSubjects(program.subjects);
     subjectsAndElectives.setElectives(program.electives);
+  };
 
+  // Function to handle changes in selected programs
+  const handlePrograms = (value: string) => {
     // If the form state indicates a 4-year college, update modal state based on program options
     if (formState.is4Y) {
       const programsOptions = programs.map((p) => p.name);
       const isAlternative = programsOptions.includes(value);
       formState.setIsModal(isAlternative);
+    } else {
+      programFilter(value);
     }
+  };
+
+  // Function to handle changes in selected programs
+  const handleOptionalPrograms = (value: string) => {
+    // If the form state indicates a 4-year college, update modal state based on program options
   };
 
   // Function to handle the "Yes" button click
@@ -564,7 +572,11 @@ const Assessment = () => {
                               </DialogDescription>
                               <DialogFooter>
                                 <DialogClose asChild>
-                                  <Button type="button" variant="secondary">
+                                  <Button
+                                    type="button"
+                                    variant="secondary"
+                                    onClick={() => formState.setStatus(true)}
+                                  >
                                     CLOSE
                                   </Button>
                                 </DialogClose>
@@ -608,6 +620,10 @@ const Assessment = () => {
                                     <Combobox
                                       options={options.optionalPrograms}
                                       {...field}
+                                      onChange={(value) => {
+                                        field.onChange(value);
+                                        programFilter(value);
+                                      }}
                                     />
                                   </FormControl>
 

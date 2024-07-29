@@ -1,13 +1,20 @@
 import { useEffect, useState } from "react";
 
 export default function College() {
-  const [unis, setUnis] = useState([]);
+  const [unis, setUnis] = useState<any[]>([]);
   useEffect(() => {
     // Transforming the assessment data into an array if it's not already
     const unparsed: string | null = localStorage.getItem("UNIS");
     const unis = JSON.parse(unparsed as string);
 
-    setUnis(unis);
+    // Use a Set to filter out duplicate universities by name
+    const uniqueFiltered = Array.from(
+      new Set(unis.map((item: { name: any }) => item.name))
+    ).map((name) => {
+      return unis.find((item: { name: unknown }) => item.name === name);
+    });
+
+    setUnis(uniqueFiltered);
   }, [unis]);
   return (
     <div className="w-full grid grid-cols-2 gap-4">

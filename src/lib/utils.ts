@@ -57,11 +57,6 @@ export const isCyclic = (obj: any): boolean => {
 };
 
 export const isAggregatePassing = (arr: number[]) => {
-  // Check if the input array has 6 or 7 elements
-  if (arr.length >= 7) {
-    throw new Error("Input array must greater of equal to 7 numbers");
-  }
-
   // Check if all numbers are between 1 and 6
   if (!arr.every((num) => num >= 1 && num <= 6)) {
     throw new Error("All numbers must be between 1 and 6");

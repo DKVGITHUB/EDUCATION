@@ -246,7 +246,7 @@ export const Header = () => {
                     <Button
                       variant={"outline"}
                       className={
-                        "mr-7 text-sm bg-[none] text-[#0066f5] shadow-none  max-[980px]:hidden "
+                        "mr-7 text-sm bg-[none] uppercase font-bold shadow-none mt-2 max-[980px]:hidden "
                       }
                     >
                       Feedback{" "}
