@@ -178,8 +178,8 @@ const Assessment = () => {
 
   // Use effect to handle informational modal visibility based on form state status
   useEffect(() => {
-    if (!formState.status || formState.status) {
-      refs.infoRef.current?.click(); // Open the informational modal if status is false or true
+    if (!formState.status) {
+      refs.infoRef.current?.click(); // Open the informational modal if status is false
     }
   }, [formState.status]);
 
@@ -559,13 +559,7 @@ const Assessment = () => {
                                 <DialogTitle>INFORMATION</DialogTitle>
                               </DialogHeader>
                               <DialogDescription>
-                                { formState.status ? `Thank you for providing your information. We&apos;ve
-                                reviewed the grades you submitted, and it
-                                appears they meet the current
-                                requirements for your chosen program. We
-                                encourage you to double-check your entries for
-                                any unintended errors. We&apos;re here to help you find
-                                the best path forward.`:`Thank you for providing your information. We&apos;ve
+                                Thank you for providing your information. We&apos;ve
                                 reviewed the grades you submitted, and it
                                 appears they did not meet the current
                                 requirements for your chosen program. We
@@ -574,10 +568,10 @@ const Assessment = () => {
                                 correct, please consider exploring our other
                                 program options that might be a great fit for
                                 your qualifications . We&apos;re here to help you find
-                                the best path forward.` }
+                                the best path forward.
                               </DialogDescription>
                               <DialogFooter>
-                              {!formState.status && <DialogClose asChild>
+                             <DialogClose asChild>
                                   <Button
                                     type="button"
                                     variant="secondary"
@@ -585,10 +579,10 @@ const Assessment = () => {
                                   >
                                     CLOSE
                                   </Button>
-                                </DialogClose> }
+                                </DialogClose> 
                                 
                                 <DialogClose asChild>
-                                  <Button type="button"> {!formState.status ? `REVIEW`: `CONTINUE`}</Button>
+                                  <Button type="button">REVIEW</Button>
                                 </DialogClose>
                               </DialogFooter>
                             </DialogContent>
