@@ -101,7 +101,7 @@ const Assessment = () => {
 
   // Create a debounced version of the handleStatus function to delay its execution by 10000ms (10 seconds)
   const debouncedFetch = useCallback(
-    debounce((updatedGrades: any) => handleStatus(updatedGrades), 5000),
+    debounce((updatedGrades: any) => handleStatus(updatedGrades), 3000),
     [] // Dependencies array, empty means it will be created only once
   );
 
@@ -565,28 +565,25 @@ const Assessment = () => {
                               <DialogDescription>
                                 Thank you for providing your information.
                                 We&apos;ve reviewed the grades you submitted,
-                                and it appears they did not meet the current
+                                and it appears they may not meet the current
                                 requirements for your chosen program. We
                                 encourage you to double-check your entries for
                                 any unintended errors. If the grades are
                                 correct, please consider exploring our other
                                 program options that might be a great fit for
-                                your qualifications . We&apos;re here to help
-                                you find the best path forward.
+                                your qualifications. We&apos;re here to help you
+                                find the best path forward.
                               </DialogDescription>
                               <DialogFooter>
-                                {!formState.status && (
-                                  <DialogClose asChild>
-                                    <Button
-                                      type="button"
-                                      variant="secondary"
-                                      onClick={() => formState.setStatus(true)}
-                                    >
-                                      CLOSE
-                                    </Button>
-                                  </DialogClose>
-                                )}
-
+                                <DialogClose asChild>
+                                  <Button
+                                    type="button"
+                                    variant="secondary"
+                                    onClick={() => formState.setStatus(true)}
+                                  >
+                                    CLOSE
+                                  </Button>
+                                </DialogClose>
                                 <DialogClose asChild>
                                   <Button type="button">
                                     {" "}

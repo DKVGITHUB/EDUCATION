@@ -30,15 +30,19 @@ const useSelectedOptions = () => {
 
 const useEducationForm = () => {
   // Form state
-  const [isNotAttending, setIsNotAttending] = useState(false);
-  const [isHS, setIsHS] = useState(false);
-  const [is4Y, setIs4Y] = useState(false);
-  const [isAlternative, setIsAlternative] = useState(false);
-  const [isModal, setIsModal] = useState(false);
-  const [loading, setLoading] = useState(false);
-  const [isAssessment, setIsAssessment] = useState(false);
+  const [isNotAttending, setIsNotAttending] = useState<boolean>(false);
+  const [isHS, setIsHS] = useState<boolean>(false);
+  const [is4Y, setIs4Y] = useState<boolean>(false);
+  const [isAlternative, setIsAlternative] = useState<boolean>(false);
+  const [isModal, setIsModal] = useState<boolean>(false);
+  const [loading, setLoading] = useState<boolean>(false);
+  const [isAssessment, setIsAssessment] = useState<boolean>(false);
   const [grades, setGrades] = useState([]);
+<<<<<<< HEAD
   const [status, setStatus] = useState<boolean>();
+=======
+  const [status, setStatus] = useState<boolean>(true);
+>>>>>>> f7893edb04ffb251bb417537c837cc5b885b2a13
 
   // Subjects and electives
   const [subjects, setSubjects] = useState<Subjects>([]);

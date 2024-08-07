@@ -21,6 +21,9 @@ export default function Result() {
         </div>
         {/* Content area with tabs for Majors, Colleges, and Careers */}
         <div className="p-5">
+          <p className="font-semibold text-lg p-5">
+            The grades you provided meet the requirements for your chosen program.
+          </p>
           <Tabs defaultValue="major">
             <TabsList>
               <TabsTrigger value="major">Majors</TabsTrigger>
