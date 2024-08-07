@@ -38,7 +38,7 @@ const useEducationForm = () => {
   const [loading, setLoading] = useState(false);
   const [isAssessment, setIsAssessment] = useState(false);
   const [grades, setGrades] = useState([]);
-  const [status, setStatus] = useState(true);
+  const [status, setStatus] = useState<boolean>();
 
   // Subjects and electives
   const [subjects, setSubjects] = useState<Subjects>([]);

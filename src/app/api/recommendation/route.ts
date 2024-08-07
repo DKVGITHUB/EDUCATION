@@ -10,6 +10,8 @@ import { auth } from "@clerk/nextjs/server";
 //This line imports the NextResponse class from the next/server module. This class likely represents a response that can be sent back to the client in a Next.js server-side function.
 import { NextResponse } from "next/server";
 import { getUniqueAttributes, vectorize } from "@/lib/vectorize";
+import { programCareers } from "@/components/dataset";
+import { Item } from "@radix-ui/react-accordion";
 
 type MajorRecommendationType = {
   similarity: number;
@@ -33,7 +35,10 @@ export async function POST(req: Request) {
   //This line calls the auth function to get information about the current user, specifically their userId.
   const { userId } = auth();
   //This line uses req.json() to parse the incoming request body as JSON and extract the title property from it.
-  const { skill, interest, regionOfSchool, typeOfUni } = await req.json();
+  const { data, status } = await req.json();
+
+  const { skill, interest, regionOfSchool, typeOfUni, programs, alprograms } =
+    data;
   try {
     //This line checks if there is no userId (i.e., the user is not authenticated) or if the user is not a mentor. If either condition is true, it returns a NextResponse with an "UNAUTHORIZED" status code (401).
     if (!userId) {
@@ -77,6 +82,12 @@ export async function POST(req: Request) {
       (rec: any) => rec.similarity > 0.2
     );
 
+    const program: string = status ? alprograms : programs;
+
+    const [programsCareer] = programCareers.filter(
+      (item) => item.name === program
+    );
+
     const majorRecommendations =
       recommendationsWithSimilarityAboveZeroThree.filter(
         (item: MajorRecommendationType) => item.description
@@ -114,6 +125,7 @@ export async function POST(req: Request) {
       majors: majorRecommendations,
       careers: careerRecommendations,
       unis: unisWithTypeWithRegion,
+      programsCareer: programsCareer,
       skills: skill,
       interests: interest,
     });

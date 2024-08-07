@@ -4,6 +4,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
 import Career from "./_components/career";
 import College from "./_components/college";
 import Major from "./_components/major";
+import Program from "./_components/program";
 
 export default function Result() {
   return (
@@ -14,6 +15,9 @@ export default function Result() {
           <h1 className="text-white font-semibold">
             {`Majors, Colleges, Careers`}
           </h1>
+        </div>
+        <div className="p-5">
+          <Program />
         </div>
         {/* Content area with tabs for Majors, Colleges, and Careers */}
         <div className="p-5">

@@ -70,6 +70,7 @@ interface ApiResponse {
   unis: any[]; // Array of any type representing universities
   skills: any[]; // Array of any type representing skills
   interests: any[]; // Array of any type representing interests
+  programsCareer: any; // Array of any type representing interests
 }
 
 const Assessment = () => {
@@ -259,10 +260,11 @@ const Assessment = () => {
 
   // Function to post recommendation data to the server
   const postRecommendation = async (data: FormValues): Promise<ApiResponse> => {
+    const status = formState.is4Y;
     // Send a POST request to the server with the recommendation data
     const response = await axios.post(
       "api/recommendation", // Endpoint for the recommendation API
-      JSON.stringify(data), // Data to be sent in the request body, converted to JSON string
+      JSON.stringify({ data, status }), // Data to be sent in the request body, converted to JSON string
       {
         headers: { "Content-Type": "application/json" }, // Set the request headers
       }
@@ -278,7 +280,7 @@ const Assessment = () => {
       formState.setLoading(true);
 
       // Post the recommendation data and destructure the response
-      const { careers, majors, unis, skills, interests } =
+      const { careers, majors, unis, skills, interests, programsCareer } =
         await postRecommendation(values);
 
       // Check for cyclic references in the data
@@ -289,10 +291,11 @@ const Assessment = () => {
         localStorageUtil.save("UNIS", unis);
         localStorageUtil.save("SKILLS", skills);
         localStorageUtil.save("INTERESTS", interests);
+        localStorageUtil.save("PROGRAMS-CAREER", programsCareer);
 
         // If careers, majors, and unis data exist, navigate to the result page
         if (careers && majors && unis) {
-          router.replace("/result");
+          router.push("/result");
         }
       } else {
         // Log an error if cyclic references are detected
@@ -524,12 +527,13 @@ const Assessment = () => {
                               </DialogHeader>
                               <DialogDescription>
                                 Thank you for providing your information. Based
-                                on what you&apos;ve shared, we think you might also
-                                be interested in some of our other excellent
-                                programs that could be a great match for your
-                                profile. Would you like to explore these
-                                alternative options? We&apos;re here to help you find
-                                the best fit for your goals and qualifications.
+                                on what you&apos;ve shared, we think you might
+                                also be interested in some of our other
+                                excellent programs that could be a great match
+                                for your profile. Would you like to explore
+                                these alternative options? We&apos;re here to
+                                help you find the best fit for your goals and
+                                qualifications.
                               </DialogDescription>
                               <DialogFooter>
                                 <DialogClose asChild ref={refs.closeRef}>
@@ -559,29 +563,35 @@ const Assessment = () => {
                                 <DialogTitle>INFORMATION</DialogTitle>
                               </DialogHeader>
                               <DialogDescription>
-                                Thank you for providing your information. We&apos;ve
-                                reviewed the grades you submitted, and it
-                                appears they may not meet the current
+                                Thank you for providing your information.
+                                We&apos;ve reviewed the grades you submitted,
+                                and it appears they did not meet the current
                                 requirements for your chosen program. We
                                 encourage you to double-check your entries for
                                 any unintended errors. If the grades are
                                 correct, please consider exploring our other
                                 program options that might be a great fit for
-                                your qualifications. We&apos;re here to help you find
-                                the best path forward.
+                                your qualifications . We&apos;re here to help
+                                you find the best path forward.
                               </DialogDescription>
                               <DialogFooter>
+                                {!formState.status && (
+                                  <DialogClose asChild>
+                                    <Button
+                                      type="button"
+                                      variant="secondary"
+                                      onClick={() => formState.setStatus(true)}
+                                    >
+                                      CLOSE
+                                    </Button>
+                                  </DialogClose>
+                                )}
+
                                 <DialogClose asChild>
-                                  <Button
-                                    type="button"
-                                    variant="secondary"
-                                    onClick={() => formState.setStatus(true)}
-                                  >
-                                    CLOSE
+                                  <Button type="button">
+                                    {" "}
+                                    {!formState.status ? `REVIEW` : `CONTINUE`}
                                   </Button>
-                                </DialogClose>
-                                <DialogClose asChild>
-                                  <Button type="button">REVIEW</Button>
                                 </DialogClose>
                               </DialogFooter>
                             </DialogContent>
@@ -1010,9 +1020,9 @@ const Assessment = () => {
                               </DialogHeader>
                               <DialogDescription>
                                 Thank you for providing your information! Are
-                                you satisfied with the details you&apos;ve entered so
-                                far? If everything looks good, can we proceed
-                                with the assessment?
+                                you satisfied with the details you&apos;ve
+                                entered so far? If everything looks good, can we
+                                proceed with the assessment?
                               </DialogDescription>
                               <DialogFooter>
                                 <DialogClose asChild>

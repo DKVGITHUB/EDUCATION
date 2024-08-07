@@ -37,6 +37,7 @@ import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import axios from "axios";
+import toast from "react-hot-toast";
 
 const formSchema = z.object({
   feedback: z.string().min(1),
@@ -121,8 +122,6 @@ export const Header = () => {
         },
       }
     );
-
-    console.log(response.data);
   };
 
   // Component rendering
