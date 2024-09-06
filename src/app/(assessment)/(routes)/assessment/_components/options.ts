@@ -14,6 +14,7 @@ import {
   typeUnis,
   collegeSkills,
   interestingCareers,
+  electives,
 } from "./dataset";
 
 // Helper function to convert array to options
@@ -51,4 +52,5 @@ export const options = {
   typeUnis: toOptions(typeUnis),
   collegeSkills: toOptions(collegeSkills),
   interestingCareers: toNumberOptions(interestingCareers),
+  electives: toNumberOptions(electives),
 };

@@ -6,27 +6,7 @@ export default function Footer() {
   // Array of social media links with corresponding SVG icons
   const socials = [
     {
-      href: "https://twitter.com/",
-      svg: (
-        // Twitter SVG icon
-        <svg
-          className="h-4 w-4 fill-white mr-4"
-          xmlns="http://www.w3.org/2000/svg"
-          fill="#022B69"
-          width="24"
-          height="24"
-          viewBox="0 0 24 24"
-          svg-inline=""
-          role="presentation"
-          focusable="false"
-          tabIndex={-1}
-        >
-          <path d="M24.05 4.33c-.897.396-1.852.66-2.847.787a4.951 4.951 0 002.173-2.758 9.81 9.81 0 01-3.133 1.208 4.928 4.928 0 00-3.608-1.579c-2.736 0-4.937 2.242-4.937 4.99 0 .396.033.776.114 1.138-4.107-.202-7.742-2.19-10.183-5.219a5.06 5.06 0 00-.676 2.522 5.01 5.01 0 002.194 4.146A4.844 4.844 0 01.915 8.95v.055c0 2.424 1.713 4.438 3.959 4.902-.403.111-.84.164-1.296.164-.316 0-.635-.018-.935-.085.64 1.976 2.457 3.428 4.616 3.476a9.864 9.864 0 01-6.125 2.128 9.17 9.17 0 01-1.182-.069 13.812 13.812 0 007.579 2.239c9.09 0 14.06-7.605 14.06-14.197 0-.22-.007-.434-.018-.645a9.908 9.908 0 002.476-2.59z"></path>
-        </svg>
-      ),
-    },
-    {
-      href: "https://facebook.com/",
+      href: "https://www.facebook.com/share/ukmD2J7E7RkubEfw/?mibextid=LQQJ4d",
       svg: (
         // Facebook SVG icon
         <svg
@@ -46,7 +26,7 @@ export default function Footer() {
       ),
     },
     {
-      href: "https://wa.me/message",
+      href: "https://wa.me/233260870247",
       svg: (
         <svg
           className="h-4 w-4 fill-white mr-4"
@@ -63,26 +43,9 @@ export default function Footer() {
         </svg>
       ),
     },
+
     {
-      href: "https://t.me/",
-      svg: (
-        <svg
-          className="h-4 w-4 fill-white mr-4"
-          xmlns="http://www.w3.org/2000/svg"
-          width="460"
-          height="386"
-          viewBox="0 0 460 386"
-          svg-inline=""
-          role="presentation"
-          focusable="false"
-          tabIndex={-1}
-        >
-          <path d="M458.689 35.231l-69.417 327.37c-5.237 23.105-18.895 28.854-38.304 17.972L245.2 302.631l-51.034 49.086c-5.647 5.647-10.372 10.372-21.256 10.372l7.598-107.722L376.539 77.23c8.523-7.598-1.848-11.809-13.247-4.21L120.95 225.614 16.619 192.96c-22.694-7.086-23.104-22.695 4.723-33.579L429.423 2.166c18.893-7.085 35.427 4.209 29.266 33.065z"></path>
-        </svg>
-      ),
-    },
-    {
-      href: "https://instagram.com/",
+      href: "https://www.instagram.com/eduall24?igsh=a3VkeXdkYzA1cDN6&utm_source=qr",
       svg: (
         <svg
           className="h-4 w-4 fill-white mr-4"
@@ -96,24 +59,6 @@ export default function Footer() {
           tabIndex={-1}
         >
           <path d="M23.041 0c4.843 0 8.782 3.94 8.782 8.782v14.259c0 4.842-3.94 8.782-8.782 8.782H8.782C3.94 31.823 0 27.883 0 23.041V8.782C0 3.94 3.94 0 8.782 0h14.259zM29 23.041V8.782a5.966 5.966 0 00-5.959-5.959H8.782a5.965 5.965 0 00-5.958 5.959v14.259A5.965 5.965 0 008.782 29h14.259A5.965 5.965 0 0029 23.041zM15.912 7.712c4.522 0 8.2 3.678 8.2 8.2s-3.678 8.2-8.2 8.2-8.2-3.678-8.2-8.2c0-4.522 3.678-8.2 8.2-8.2zm0 13.576c2.965 0 5.377-2.412 5.377-5.376s-2.412-5.377-5.377-5.377-5.377 2.412-5.377 5.377a5.382 5.382 0 005.377 5.376zm8.544-15.97c.546 0 1.08.22 1.464.606.386.384.606.919.606 1.464 0 .544-.22 1.079-.606 1.464a2.091 2.091 0 01-1.464.606 2.087 2.087 0 01-1.463-.606 2.087 2.087 0 01-.608-1.464c0-.546.222-1.08.608-1.464a2.079 2.079 0 011.463-.606z"></path>
-        </svg>
-      ),
-    },
-    {
-      href: "https://youtube.com/",
-      svg: (
-        <svg
-          className="h-4 w-4 fill-white mr-4"
-          viewBox="0 0 48 48"
-          tabIndex={-1}
-          svg-inline=""
-          role="presentation"
-          focusable="false"
-        >
-          <g>
-            <path d="M47.48 13.21s-.46-3.3-1.9-4.74c-1.82-1.92-3.86-1.92-4.8-2.04C34.08 5.94 24 6 24 6s-10.04-.06-16.74.42c-.92.12-2.96.12-4.78 2.04C1.04 9.9.56 13.2.56 13.2S.08 17.09 0 20.96v4.05c.08 3.88.56 7.75.56 7.75s.48 3.3 1.92 4.76c1.82 1.9 4.2 1.84 5.28 2.04 3.76.36 15.82.44 16.24.44 0 0 10.1.02 16.8-.46.92-.12 2.96-.12 4.78-2.04 1.44-1.44 1.92-4.74 1.92-4.74s.48-3.88.5-7.75v-4.05c-.04-3.87-.52-7.75-.52-7.75zM19.14 30V15.98L32 23.26 19.14 30z"></path>
-            <path d="M0 0h47.99v48H0z" fill="none"></path>
-          </g>
         </svg>
       ),
     },
@@ -134,7 +79,7 @@ export default function Footer() {
               <li className="mt-2 mb-0 list-none">
                 <a
                   className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
-                  href="/"
+                  href="/aboutUs"
                 >
                   About Us
                 </a>
@@ -143,24 +88,16 @@ export default function Footer() {
               <li className="mt-2 mb-0 list-none">
                 <a
                   className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
-                  href="/"
+                  href="/career"
                 >
                   Careers
-                </a>
-              </li>
-              <li className="mt-2 mb-0 list-none">
-                <a
-                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
-                  href="/"
-                >
-                  Ambassadors
                 </a>
               </li>
 
               <li className="mt-2 mb-0 list-none">
                 <a
                   className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
-                  href="/"
+                  href="/privacy"
                 >
                   Privacy
                 </a>
@@ -168,7 +105,7 @@ export default function Footer() {
               <li className="mt-2 mb-0 list-none">
                 <a
                   className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
-                  href="/"
+                  href="/terms"
                 >
                   Terms
                 </a>
@@ -185,35 +122,9 @@ export default function Footer() {
               <li className="mt-2 mb-0 list-none">
                 <a
                   className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
-                  href="/"
+                  href="/faq"
                 >
                   FAQs
-                </a>
-              </li>
-
-              <li className="mt-2 mb-0 list-none">
-                <a
-                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
-                  href="/"
-                >
-                  Security
-                </a>
-              </li>
-              <li className="mt-2 mb-0 list-none">
-                <a
-                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
-                  href="/"
-                >
-                  Blog
-                </a>
-              </li>
-
-              <li className="mt-2 mb-0 list-none">
-                <a
-                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
-                  href="/"
-                >
-                  Help Center
                 </a>
               </li>
             </ul>
@@ -226,21 +137,9 @@ export default function Footer() {
             <ul>
               {/* List items with contact information */}
               <li className="mt-2 mb-0 list-none">
-                <a
-                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
-                  href="/"
-                >
+                <p className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base">
                   support@edu-all.com
-                </a>
-              </li>
-
-              <li className="mt-2 mb-0 list-none">
-                <a
-                  className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base"
-                  href="/"
-                >
-                  Whatsapp
-                </a>
+                </p>
               </li>
             </ul>
           </div>
@@ -250,10 +149,8 @@ export default function Footer() {
         <div className="box-border w-full flex flex-initial flex-row flex-wrap">
           <div className="box-border basis-[58.3333333333%] max-w-[58.3333333333%] p-4">
             <ul>
-              {/* Mapping through socials array to render social media icons and links */}
               {socials.map((item, i) => (
                 <li key={i} className="inline-block mt-5">
-                  {/* Social media link with corresponding SVG icon */}
                   <a
                     className="font-medium text-white transition-opacity duration-[0.3s] ease-[ease] text-[1.46rem]"
                     href={item.href}

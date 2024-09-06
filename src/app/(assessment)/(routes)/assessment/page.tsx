@@ -7,7 +7,6 @@ import { camelCase, debounce } from "lodash"; // Utility functions from lodash: 
 import { HashLoader } from "react-spinners"; // HashLoader component from react-spinners for loading animations
 import axios from "axios"; // Axios library for making HTTP requests
 
-import * as z from "zod"; // Zod library for schema validation
 import {
   Form,
   FormField,
@@ -40,7 +39,7 @@ import {
 import { Badge } from "@/components/ui/badge"; // Badge component from a custom UI library
 import { X } from "lucide-react"; // X icon from lucide-react
 import { Combobox } from "@/components/ui/combobox"; // Combobox component from a custom UI library
-import { formSchema } from "./_components/formSchema"; // Import form schema from a local module
+import { FormValues } from "./_components/formSchema"; // Import form schema from a local module
 import useFormWithEducationSchema from "./_components/ufwes"; // Custom hook for using form with education schema
 import useEducationForm from "./_components/hooks"; // Custom hook for education form logic
 import { ethnic, month, programs } from "./_components/dataset"; // Importing datasets from local module
@@ -52,16 +51,9 @@ import {
   isAggregatePassing,
 } from "@/lib/utils"; // Import utility functions from a custom library
 
-// Define types for the form options
-type Option = Record<"value" | "label", string>; // Defines an Option type with value and label properties as strings
+import useCreateHandlers from "./_components/useCreateHandlers";
 
 // Define types for form values
-interface FormValues {
-  skill: string[]; // Array of strings representing skills
-  interest: string[]; // Array of strings representing interests
-  regionOfSchool: string; // String representing the region of school
-  typeOfUni: string; // String representing the type of university
-}
 
 // Define the structure of API response
 interface ApiResponse {
@@ -84,7 +76,7 @@ const Assessment = () => {
   const form = useFormWithEducationSchema();
 
   // Destructure various states and functions from the custom useEducationForm hook
-  const { formState, subjectsAndElectives, skills, interests, refs } =
+  const { formState, subjectsAndElectives, skills, interests, refs, elective } =
     useEducationForm();
 
   // Function to handle the status of grades
@@ -94,6 +86,8 @@ const Assessment = () => {
 
     // Check if the aggregate passing condition is met
     const aggregatePassing = isAggregatePassing(gradeProcessed);
+
+    console.log(aggregatePassing);
 
     // Update the form state status based on the aggregate passing condition
     formState.setStatus(aggregatePassing);
@@ -108,7 +102,9 @@ const Assessment = () => {
   // Function to handle changes in grades
   const handleGradeChange = (value: string, name: string) => {
     // Update the grades state with the new value
+    const electiveArray = elective.state.options;
     const updatedGrades = { ...formState.grades, [name]: value };
+    console.log(updatedGrades);
     formState.setGrades(updatedGrades);
 
     // handle the status of grades
@@ -156,11 +152,6 @@ const Assessment = () => {
     }
   };
 
-  // Function to handle changes in selected programs
-  const handleOptionalPrograms = (value: string) => {
-    // If the form state indicates a 4-year college, update modal state based on program options
-  };
-
   // Function to handle the "Yes" button click
   const onClickYes = () => {
     // Update form state to indicate an alternative program and close the modal
@@ -185,77 +176,53 @@ const Assessment = () => {
   }, [formState.status]);
 
   // Function to create event handlers for skill and interest selection
-  const useCreateHandlers = (
-    // State containing a reference to the input element
-    state: { inputRef: { current: any } },
-    // Function to update the state
-    setState: (arg0: {
-      (prev: { selected: any[]; options: any[] }): {
-        selected: any[];
-        options: any[];
-      };
-      (prev: any): any;
-    }) => void,
-    // Form field name to be updated
-    formField: any
-  ) => ({
-    // Event handler for unselecting an option
-    handleUnselect: useCallback((option: Option) => {
-      // Update the state by filtering out the unselected option from selected and options arrays
-      setState((prev: { selected: any[]; options: any[] }) => ({
-        ...prev,
-        selected: prev.selected.filter((s) => s.value !== option.value),
-        options: prev.options.filter((s) => s !== option.value),
-      }));
-      // Update the form field by removing the unselected option from its value
-      form.setValue(
-        formField,
-        form.getValues(formField).filter((s: string) => s !== option.value)
-      );
-    }, []),
-
-    // Event handler for key down events
-    handleKeyDown: useCallback((e: React.KeyboardEvent<HTMLDivElement>) => {
-      const input = state.inputRef.current;
-      if (input) {
-        // If Delete or Backspace is pressed and input is empty, remove the last selected item
-        if (
-          (e.key === "Delete" || e.key === "Backspace") &&
-          input.value === ""
-        ) {
-          setState((prev) => ({
-            ...prev,
-            selected: prev.selected.slice(0, -1),
-          }));
-        }
-        // If Escape is pressed, blur the input
-        if (e.key === "Escape") {
-          input.blur();
-        }
-      }
-    }, []),
-  });
 
   // Create event handlers for skills selection
-  const skillHandlers = useCreateHandlers(skills, skills.setSelected, "skill");
+  const skillHandlers = useCreateHandlers<FormValues>(
+    skills.state,
+    skills.setState,
+    "skill",
+    form
+  );
 
   // Create event handlers for interests selection
   const interestHandlers = useCreateHandlers(
-    interests,
-    interests.setSelected,
-    "interest"
+    interests.state,
+    interests.setState,
+    "interest",
+    form
+  );
+
+  const electiveHandlers = useCreateHandlers(
+    elective.state,
+    elective.setState,
+    "elective",
+    form
   );
 
   // Filter options for selectable skills, excluding already selected skills
   const selectablesSkills = options.collegeSkills.filter(
     (option: { value: string }) =>
-      !skills.selected.some((selected) => selected.value === option.value)
+      Array.isArray(skills.state.selected) &&
+      !skills.state.selected.some((selected) => selected.value === option.value)
   );
 
   // Filter options for selectable interests, excluding already selected interests
   const selectablesInterests = options.interestingCareers.filter(
     (option: { value: string }) =>
-      !interests.selected.some((selected) => selected.value === option.value)
+      Array.isArray(skills.state.selected) &&
+      !interests.state.selected.some(
+        (selected) => selected.value === option.value
+      )
+  );
+
+  // Filter options for selectable interests, excluding already selected interests
+  const selectablesElectives = options.electives?.filter(
+    (option: { value: string }) =>
+      Array.isArray(skills.state.selected) &&
+      !elective.state.selected.some(
+        (selected) => selected?.value === option?.value
+      )
   );
 
   // Function to post recommendation data to the server
@@ -306,6 +273,7 @@ const Assessment = () => {
     } catch (error) {
       // Log any errors that occur during form submission
       console.error("Error submitting form:", error);
+
       // Show a toast notification to the user
       toast.error("Something went wrong");
     } finally {
@@ -313,6 +281,8 @@ const Assessment = () => {
       formState.setLoading(false);
     }
   };
+
+  console.log(form.formState.errors);
 
   return (
     <>
@@ -675,26 +645,175 @@ const Assessment = () => {
                           </div>
                         )}
 
-                        {subjectsAndElectives.electives.length > 0 && (
-                          <div
-                            className={`p-2 grid grid-cols-${subjectsAndElectives.electives?.length} gap-4`}
-                          >
-                            {subjectsAndElectives.electives.map((elective) => (
+                        {subjectsAndElectives.subjects.length > 0 && (
+                          <div className="p-2">
+                            <FormField
+                              control={form.control}
+                              name="elective"
+                              render={({ field }) => (
+                                <FormItem>
+                                  <FormLabel>Electives</FormLabel>
+                                  <FormControl>
+                                    <Command
+                                      onKeyDown={electiveHandlers.handleKeyDown}
+                                      className="overflow-visible bg-transparent"
+                                    >
+                                      <div className="group rounded-md border border-input px-3 py-3 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
+                                        <div className="flex flex-wrap gap-1">
+                                          {elective.state.selected.map(
+                                            (option) => {
+                                              return (
+                                                <Badge
+                                                  key={option.value}
+                                                  variant="secondary"
+                                                >
+                                                  {option.label}
+                                                  <button
+                                                    className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                                    onKeyDown={(e) => {
+                                                      if (e.key === "Enter") {
+                                                        electiveHandlers.handleUnselect(
+                                                          option
+                                                        );
+                                                      }
+                                                    }}
+                                                    onMouseDown={(e) => {
+                                                      e.preventDefault();
+                                                      e.stopPropagation();
+                                                    }}
+                                                    onClick={() =>
+                                                      electiveHandlers.handleUnselect(
+                                                        option
+                                                      )
+                                                    }
+                                                  >
+                                                    <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+                                                  </button>
+                                                </Badge>
+                                              );
+                                            }
+                                          )}
+                                          {/* Avoid having the "Search" Icon */}
+                                          <CommandPrimitive.Input
+                                            ref={elective.state.inputRef}
+                                            value={elective.state.inputValue}
+                                            onValueChange={(value) => {
+                                              elective.setInputValue(value);
+                                              field.onChange(value); // Integrate form control onChange
+                                            }}
+                                            onBlur={() =>
+                                              elective.setOpen(false)
+                                            }
+                                            onFocus={() =>
+                                              elective.setOpen(true)
+                                            }
+                                            placeholder={"Select electives..."}
+                                            className="ml-2 flex-1 bg-transparent outline-none placeholder:text-muted-foreground"
+                                          />
+                                        </div>
+                                      </div>
+                                      <div className="relative mt-2">
+                                        <CommandList>
+                                          {elective.state.open &&
+                                          selectablesElectives.length > 0 ? (
+                                            <div className="relative bottom-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in max-h-30 overflow-y-auto">
+                                              <CommandGroup className="h-full overflow-auto">
+                                                {selectablesElectives.map(
+                                                  (option: {
+                                                    value: any;
+                                                    label: any;
+                                                  }) => {
+                                                    return (
+                                                      <CommandItem
+                                                        key={option.value}
+                                                        onMouseDown={(e) => {
+                                                          e.preventDefault();
+                                                          e.stopPropagation();
+                                                        }}
+                                                        onSelect={(value) => {
+                                                          elective.setInputValue(
+                                                            ""
+                                                          );
+                                                          elective.setState(
+                                                            (prevState) => ({
+                                                              ...prevState,
+                                                              selected: [
+                                                                ...prevState.selected,
+                                                                option,
+                                                              ],
+                                                              options: [
+                                                                ...prevState.options,
+                                                                option.value,
+                                                              ],
+                                                            })
+                                                          );
+                                                          field.onChange([
+                                                            ...elective.state
+                                                              .options,
+                                                            option.value,
+                                                          ]);
+                                                        }}
+                                                        className={
+                                                          "cursor-pointer"
+                                                        }
+                                                      >
+                                                        {option.label}
+                                                      </CommandItem>
+                                                    );
+                                                  }
+                                                )}
+                                              </CommandGroup>
+                                            </div>
+                                          ) : null}
+                                        </CommandList>
+                                      </div>
+                                    </Command>
+                                  </FormControl>
+
+                                  <FormMessage />
+                                </FormItem>
+                              )}
+                            />
+                          </div>
+                        )}
+
+                        {elective.state.options.length > 0 && (
+                          <div className={`p-2 grid grid-cols-4 gap-4`}>
+                            {elective.state.options.map((elective, i) => (
                               <FormField
-                                key={elective}
+                                key={i}
                                 control={form.control}
                                 name={
                                   camelCase(elective) as
+                                    | "grades.businessManagement"
                                     | "grades.economics"
                                     | "grades.electiveMathematics"
-                                    | "grades.literatureInEnglish"
-                                    | "grades.government"
-                                    | "grades.history"
-                                    | "grades.computerStudies"
                                     | "grades.physics"
                                     | "grades.chemistry"
-                                    | "grades.businessManagement"
-                                    | "grades.fineArts"
+                                    | "grades.electiveICT"
+                                    | "grades.biology"
+                                    | "grades.geography"
+                                    | "grades.history"
+                                    | "grades.government"
+                                    | "grades.religiousStudies"
+                                    | "grades.french"
+                                    | "grades.financialAccounting"
+                                    | "grades.costAccounting"
+                                    | "grades.management"
+                                    | "grades.foodAndNutrition"
+                                    | "grades.arts"
+                                    | "grades.textiles"
+                                    | "grades.managementInLiving"
+                                    | "grades.graphicDesign"
+                                    | "grades.basketry"
+                                    | "grades.leatherwork"
+                                    | "grades.sculpture"
+                                    | "grades.ceramics"
+                                    | "grades.generalAgriculture"
+                                    | "grades.animalHusbandry"
+                                    | "grades.buildingConstruction"
+                                    | "grades.engineering"
+                                    | "grades.woodwork"
                                 }
                                 render={({ field }) => (
                                   <FormItem>
@@ -766,7 +885,7 @@ const Assessment = () => {
                                   >
                                     <div className="group rounded-md border border-input px-3 py-3 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
                                       <div className="flex flex-wrap gap-1">
-                                        {skills.selected.map((option) => {
+                                        {skills.state.selected.map((option) => {
                                           return (
                                             <Badge
                                               key={option.value}
@@ -799,8 +918,8 @@ const Assessment = () => {
                                         })}
                                         {/* Avoid having the "Search" Icon */}
                                         <CommandPrimitive.Input
-                                          ref={skills.inputRef}
-                                          value={skills.inputValue}
+                                          ref={skills.state.inputRef}
+                                          value={skills.state.inputValue}
                                           onValueChange={(value) => {
                                             skills.setInputValue(value);
                                             field.onChange(value); // Integrate form control onChange
@@ -814,7 +933,7 @@ const Assessment = () => {
                                     </div>
                                     <div className="relative mt-2">
                                       <CommandList>
-                                        {skills.open &&
+                                        {skills.state.open &&
                                         selectablesSkills.length > 0 ? (
                                           <div className="relative bottom-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in max-h-30 overflow-y-auto">
                                             <CommandGroup className="h-full overflow-auto">
@@ -834,20 +953,22 @@ const Assessment = () => {
                                                         skills.setInputValue(
                                                           ""
                                                         );
-                                                        skills.setSelected(
-                                                          (prev) => [
-                                                            ...prev,
-                                                            option,
-                                                          ]
-                                                        );
-                                                        skills.setOptions(
-                                                          (prev) => [
-                                                            ...prev,
-                                                            option.value,
-                                                          ]
+                                                        skills.setState(
+                                                          (prevState) => ({
+                                                            ...prevState,
+                                                            selected: [
+                                                              ...prevState.selected,
+                                                              option,
+                                                            ],
+                                                            options: [
+                                                              ...prevState.options,
+                                                              option.value,
+                                                            ],
+                                                          })
                                                         );
                                                         field.onChange([
-                                                          ...skills.options,
+                                                          ...skills.state
+                                                            .options,
                                                           option.value,
                                                         ]);
                                                       }}
@@ -886,41 +1007,43 @@ const Assessment = () => {
                                   >
                                     <div className="group rounded-md border border-input px-3 py-3 text-sm ring-offset-background focus-within:ring-2 focus-within:ring-ring focus-within:ring-offset-2">
                                       <div className="flex flex-wrap gap-1">
-                                        {interests.selected.map((option) => {
-                                          return (
-                                            <Badge
-                                              key={option.value}
-                                              variant="secondary"
-                                            >
-                                              {option.label}
-                                              <button
-                                                className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
-                                                onKeyDown={(e) => {
-                                                  if (e.key === "Enter") {
+                                        {interests.state.selected.map(
+                                          (option) => {
+                                            return (
+                                              <Badge
+                                                key={option.value}
+                                                variant="secondary"
+                                              >
+                                                {option.label}
+                                                <button
+                                                  className="ml-1 rounded-full outline-none ring-offset-background focus:ring-2 focus:ring-ring focus:ring-offset-2"
+                                                  onKeyDown={(e) => {
+                                                    if (e.key === "Enter") {
+                                                      interestHandlers.handleUnselect(
+                                                        option
+                                                      );
+                                                    }
+                                                  }}
+                                                  onMouseDown={(e) => {
+                                                    e.preventDefault();
+                                                    e.stopPropagation();
+                                                  }}
+                                                  onClick={() =>
                                                     interestHandlers.handleUnselect(
                                                       option
-                                                    );
+                                                    )
                                                   }
-                                                }}
-                                                onMouseDown={(e) => {
-                                                  e.preventDefault();
-                                                  e.stopPropagation();
-                                                }}
-                                                onClick={() =>
-                                                  interestHandlers.handleUnselect(
-                                                    option
-                                                  )
-                                                }
-                                              >
-                                                <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
-                                              </button>
-                                            </Badge>
-                                          );
-                                        })}
+                                                >
+                                                  <X className="h-3 w-3 text-muted-foreground hover:text-foreground" />
+                                                </button>
+                                              </Badge>
+                                            );
+                                          }
+                                        )}
                                         {/* Avoid having the "Search" Icon */}
                                         <CommandPrimitive.Input
-                                          ref={interests.inputRef}
-                                          value={interests.inputValue}
+                                          ref={interests.state.inputRef}
+                                          value={interests.state.inputValue}
                                           onValueChange={(value) => {
                                             interests.setInputValue(value);
                                             field.onChange(value); // Integrate form control onChange
@@ -938,7 +1061,7 @@ const Assessment = () => {
                                     </div>
                                     <div className="relative mt-2">
                                       <CommandList>
-                                        {interests.open &&
+                                        {interests.state.open &&
                                         selectablesInterests.length > 0 ? (
                                           <div className="relative bottom-0 z-10 w-full rounded-md border bg-popover text-popover-foreground shadow-md outline-none animate-in max-h-30 overflow-y-auto">
                                             <CommandGroup>
@@ -955,20 +1078,22 @@ const Assessment = () => {
                                                         interests.setInputValue(
                                                           ""
                                                         );
-                                                        interests.setSelected(
-                                                          (prev) => [
-                                                            ...prev,
-                                                            option,
-                                                          ]
-                                                        );
-                                                        interests.setOptions(
-                                                          (prev) => [
-                                                            ...prev,
-                                                            option.value,
-                                                          ]
+                                                        interests.setState(
+                                                          (prevState) => ({
+                                                            ...prevState,
+                                                            selected: [
+                                                              ...prevState.selected,
+                                                              option,
+                                                            ],
+                                                            options: [
+                                                              ...prevState.options,
+                                                              option.value,
+                                                            ],
+                                                          })
                                                         );
                                                         field.onChange([
-                                                          ...interests.options,
+                                                          ...interests.state
+                                                            .options,
                                                           option.value,
                                                         ]);
                                                       }}

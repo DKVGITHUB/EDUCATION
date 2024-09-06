@@ -23,13 +23,32 @@ const electiveSubjects = z.object({
   businessManagement: gradeSchema,
   economics: gradeSchema,
   electiveMathematics: gradeSchema,
-  literatureInEnglish: gradeSchema,
-  government: gradeSchema,
-  history: gradeSchema,
-  fineArts: gradeSchema,
-  computerStudies: gradeSchema,
   physics: gradeSchema,
   chemistry: gradeSchema,
+  electiveICT: gradeSchema,
+  biology: gradeSchema,
+  geography: gradeSchema,
+  history: gradeSchema,
+  government: gradeSchema,
+  religiousStudies: gradeSchema,
+  french: gradeSchema,
+  financialAccounting: gradeSchema,
+  costAccounting: gradeSchema,
+  management: gradeSchema,
+  foodAndNutrition: gradeSchema,
+  arts: gradeSchema,
+  textiles: gradeSchema,
+  managementInLiving: gradeSchema,
+  graphicDesign: gradeSchema,
+  basketry: gradeSchema,
+  leatherwork: gradeSchema,
+  sculpture: gradeSchema,
+  ceramics: gradeSchema,
+  generalAgriculture: gradeSchema,
+  animalHusbandry: gradeSchema,
+  buildingConstruction: gradeSchema,
+  engineering: gradeSchema,
+  woodwork: gradeSchema,
 });
 
 // Main form schema
@@ -41,11 +60,11 @@ const formSchema = z.object({
     year: z.string().min(1, "Year is required"),
   }),
   ethnic: nonEmptyString,
-  gender: z.enum(["male", "female", "other"]),
+  gender: nonEmptyString,
 
   // Educational Information
   hsgradYear: z.string().regex(/^\d{4}$/, "Must be a valid year"),
-  currAttending: z.string().min(1),
+  currAttending: nonEmptyString,
   programs: nonEmptyString,
   alprograms: optionalNonEmptyString,
   hsprograms: optionalNonEmptyString,
@@ -55,11 +74,12 @@ const formSchema = z.object({
 
   // School Information
   regionOfSchool: nonEmptyString,
-  typeOfUni: z.enum(["public", "private"]),
+  typeOfUni: nonEmptyString,
 
   // Skills and Interests
   skill: z.array(nonEmptyString).min(1, "At least one skill is required"),
   interest: z.array(nonEmptyString).min(1, "At least one interest is required"),
+  elective: z.array(nonEmptyString).min(1, "At least one elective is required"),
 });
 
 export type FormValues = z.infer<typeof formSchema>;

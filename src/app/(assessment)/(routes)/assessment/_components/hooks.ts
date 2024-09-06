@@ -1,4 +1,4 @@
-import { useState, useRef } from "react";
+import { useState, useRef, useCallback } from "react";
 
 // Define types
 type Option = { label: string; value: string };
@@ -7,24 +7,53 @@ type SubjectsGrade = Lowercase<Subjects[number]>;
 type Electives = string[];
 type ElectiveGrade = Lowercase<Electives[number]>;
 
+interface SelectedOptionsState {
+  open: boolean;
+  selected: Option[];
+  options: string[];
+  inputValue: string;
+  inputRef: React.RefObject<HTMLInputElement>;
+}
+
 // Custom hook for managing selected options
 const useSelectedOptions = () => {
-  const [open, setOpen] = useState(false);
-  const [selected, setSelected] = useState<Option[]>([]);
-  const [options, setOptions] = useState<(string | undefined)[]>([]);
-  const [inputValue, setInputValue] = useState("");
-  const inputRef = useRef<HTMLInputElement>(null);
+  const [state, setState] = useState<SelectedOptionsState>({
+    open: false,
+    selected: [],
+    options: [],
+    inputValue: "",
+    inputRef: useRef<HTMLInputElement>(null),
+  });
+
+  const setSelected = useCallback((newSelected: Option[]) => {
+    setState((prev) => ({ ...prev, selected: newSelected }));
+  }, []);
+
+  const setOptions = useCallback((newOptions: string[]) => {
+    setState((prev) => ({ ...prev, options: newOptions }));
+  }, []);
+
+  const setInputValue = (value: string) => {
+    setState((prevState) => ({
+      ...prevState,
+      inputValue: value,
+    }));
+  };
+
+  const setOpen = (value: boolean) => {
+    setState((prevState) => ({
+      ...prevState,
+      open: value,
+    }));
+  };
 
   return {
-    open,
-    setOpen,
-    selected,
+    state,
+    setState,
     setSelected,
-    options,
     setOptions,
-    inputValue,
     setInputValue,
-    inputRef,
+    setOpen,
   };
 };
 
@@ -38,7 +67,7 @@ const useEducationForm = () => {
   const [loading, setLoading] = useState<boolean>(false);
   const [isAssessment, setIsAssessment] = useState<boolean>(false);
   const [grades, setGrades] = useState([]);
-  const [status, setStatus] = useState<boolean>(true);
+  const [status, setStatus] = useState<boolean>(false);
 
   // Subjects and electives
   const [subjects, setSubjects] = useState<Subjects>([]);
@@ -47,6 +76,7 @@ const useEducationForm = () => {
   // Skills and interests
   const skillsState = useSelectedOptions();
   const interestsState = useSelectedOptions();
+  const electivesState = useSelectedOptions();
 
   // Refs
   const buttonRef = useRef<HTMLButtonElement | null>(null);
@@ -83,6 +113,7 @@ const useEducationForm = () => {
     },
     skills: skillsState,
     interests: interestsState,
+    elective: electivesState,
     refs: {
       buttonRef,
       closeRef,
