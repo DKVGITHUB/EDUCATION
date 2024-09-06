@@ -95,7 +95,7 @@ const Assessment = () => {
 
   // Create a debounced version of the handleStatus function to delay its execution by 10000ms (10 seconds)
   const debouncedFetch = useCallback(
-    debounce((updatedGrades: any) => handleStatus(updatedGrades), 3000),
+    debounce((updatedGrades: any) => handleStatus(updatedGrades), 5000),
     [] // Dependencies array, empty means it will be created only once
   );
 
