@@ -138,7 +138,7 @@ export default function Footer() {
               {/* List items with contact information */}
               <li className="mt-2 mb-0 list-none">
                 <p className=" text-white transition-opacity duration-[0.3s] ease-[ease] text-base">
-                  Chachaabla05gmail.com
+                  Chachaabla05@gmail.com
                 </p>
               </li>
             </ul>
