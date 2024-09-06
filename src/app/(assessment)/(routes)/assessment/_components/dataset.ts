@@ -103,7 +103,7 @@ export const interestingCareers = [
 export const HSPrograms = [
   "General Science",
   "General Arts",
-  "Buisiness",
+  "Business",
   "Home Economics",
   "Visual Arts",
   "Agriculture",
