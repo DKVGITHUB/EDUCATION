@@ -52,6 +52,11 @@ const Routes = [
   { name: "History", href: "/history" },
 ];
 
+const AdminRoutes = [
+  { name: "Create", href: "/admin/create" },
+  { name: "Feedback", href: "/admin/feedback" },
+];
+
 // Navigation component definition
 export const Header = () => {
   // Hooks for managing state
@@ -59,7 +64,9 @@ export const Header = () => {
 
   const { user, isSignedIn } = useUser();
 
-  const isAssessment = pathname === "/assessment";
+  const isAdminMode = pathname?.includes("/admin/");
+
+  const routes = isAdminMode ? AdminRoutes : Routes;
 
   const closeRef = useRef(null);
 
@@ -148,7 +155,7 @@ export const Header = () => {
               : "opacity-0 invisible  pl-8 pr-[35px] pt-[7vh] pb-0"
           }
         >
-          {Routes.map((item, i) => (
+          {routes.map((item, i) => (
             <li
               key={i}
               className="list-none mb-3.5 opacity-1 transform translate(0px, 0px)"
@@ -176,31 +183,32 @@ export const Header = () => {
               <SignedIn>
                 <UserButton showName />
               </SignedIn>
-              <li className="mt-[18px]">
-                <SignedOut>
+
+              <SignedOut>
+                <li className="mt-[18px]">
                   <SignInButton>
                     <Button
                       variant={"link"}
                       className={"mr-7 text-xl bg-[none] text-[#FFFFFF99]"}
                     >
-                      CONNEXION{" "}
+                      LOGIN{" "}
                     </Button>
                   </SignInButton>
-                </SignedOut>
-              </li>
+                </li>
+              </SignedOut>
 
-              <li className="mt-[18px]">
-                <SignedOut>
+              <SignedOut>
+                <li className="mt-[18px]">
                   <SignUpButton>
                     <Button
                       variant={"link"}
                       className={"mr-7 text-xl bg-[none] text-[#FFFFFF99]"}
                     >
-                      INSCRIPTION{" "}
+                      SIGNUP{" "}
                     </Button>
                   </SignUpButton>
-                </SignedOut>
-              </li>
+                </li>
+              </SignedOut>
             </ClerkLoaded>
             {/* Sign Up and Log In Routes */}
           </ul>
@@ -223,7 +231,7 @@ export const Header = () => {
           <div className="flex items-center ml w-full ml-20 justify-between">
             <ul className="list-none hidden relative ml-20 mb-1 min-[1030px]:flex">
               {/* Render navigation Routes */}
-              {Routes.map((item, i) => (
+              {routes.map((item, i) => (
                 <li key={i} className="mx-5 my-0">
                   <Link
                     className={`${
@@ -238,70 +246,73 @@ export const Header = () => {
                 </li>
               ))}
             </ul>
-            {isSignedIn && (
-              <div>
-                <Dialog>
-                  <DialogTrigger asChild>
-                    <Button
-                      variant={"outline"}
-                      className={
-                        "mr-7 text-sm bg-[none] uppercase font-bold shadow-none mt-2 max-[980px]:hidden "
-                      }
-                    >
-                      Feedback{" "}
-                    </Button>
-                  </DialogTrigger>
-                  <DialogContent className="sm:max-w-[425px]">
-                    <DialogHeader>
-                      <DialogTitle>Share Feedback</DialogTitle>
-                      <DialogDescription>
-                        Provide us insights on the accuracy and helpfulness of
-                        the recommendations you&apos;ve received.
-                      </DialogDescription>
-                    </DialogHeader>
-                    <Form {...form}>
-                      <form
-                        className="grid gap-4 py-4"
-                        onSubmit={form.handleSubmit(onSubmit)}
-                      >
-                        <FormField
-                          control={form.control}
-                          name="feedback"
-                          render={({ field }) => (
-                            <FormItem>
-                              <FormControl>
-                                <div className="grid grid-cols-4 items-center gap-4">
-                                  <Label
-                                    htmlFor="feedback"
-                                    className="text-right"
-                                  >
-                                    Feedback
-                                  </Label>
-                                  <Textarea
-                                    {...field}
-                                    className="col-span-3"
-                                    placeholder="Type your message here."
-                                  />
-                                </div>
-                              </FormControl>
 
-                              <FormMessage className="text-sm" />
-                            </FormItem>
-                          )}
-                        />
-                        <DialogFooter>
-                          <DialogClose asChild>
-                            <Button type="submit" ref={closeRef}>
-                              Send Message
-                            </Button>
-                          </DialogClose>
-                        </DialogFooter>
-                      </form>
-                    </Form>
-                  </DialogContent>
-                </Dialog>
-              </div>
-            )}
+            <div>
+              {isSignedIn && (
+                <div>
+                  <Dialog>
+                    <DialogTrigger asChild>
+                      <Button
+                        variant={"outline"}
+                        className={`mr-7 text-sm bg-[none] uppercase font-bold shadow-none mt-2 max-[980px]:hidden ${
+                          isAdminMode && "hidden"
+                        } `}
+                      >
+                        Feedback{" "}
+                      </Button>
+                    </DialogTrigger>
+                    <DialogContent className="sm:max-w-[425px]">
+                      <DialogHeader>
+                        <DialogTitle>Share Feedback</DialogTitle>
+                        <DialogDescription>
+                          Provide us insights on the accuracy and helpfulness of
+                          the recommendations you&apos;ve received.
+                        </DialogDescription>
+                      </DialogHeader>
+                      <Form {...form}>
+                        <form
+                          className="grid gap-4 py-4"
+                          onSubmit={form.handleSubmit(onSubmit)}
+                        >
+                          <FormField
+                            control={form.control}
+                            name="feedback"
+                            render={({ field }) => (
+                              <FormItem>
+                                <FormControl>
+                                  <div className="grid grid-cols-4 items-center gap-4">
+                                    <Label
+                                      htmlFor="feedback"
+                                      className="text-right"
+                                    >
+                                      Feedback
+                                    </Label>
+                                    <Textarea
+                                      {...field}
+                                      className="col-span-3"
+                                      placeholder="Type your message here."
+                                    />
+                                  </div>
+                                </FormControl>
+
+                                <FormMessage className="text-sm" />
+                              </FormItem>
+                            )}
+                          />
+                          <DialogFooter>
+                            <DialogClose asChild>
+                              <Button type="submit" ref={closeRef}>
+                                Send Message
+                              </Button>
+                            </DialogClose>
+                          </DialogFooter>
+                        </form>
+                      </Form>
+                    </DialogContent>
+                  </Dialog>
+                </div>
+              )}
+            </div>
 
             <div className=" justify-between hidden items-center min-[1030px]:flex">
               <ClerkLoading>

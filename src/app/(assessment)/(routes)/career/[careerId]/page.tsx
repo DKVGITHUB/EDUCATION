@@ -81,7 +81,7 @@ export default function Dashboard({
           <TabsTrigger value="education">Education</TabsTrigger>
           <TabsTrigger value="schools">Schools</TabsTrigger>
           <TabsTrigger value="skills">Skills</TabsTrigger>
-          <TabsTrigger value="finance">Finance</TabsTrigger>
+          <TabsTrigger value="finance">Salary</TabsTrigger>
         </TabsList>
         <TabsContent value="overview">
           <Overview id={id} />

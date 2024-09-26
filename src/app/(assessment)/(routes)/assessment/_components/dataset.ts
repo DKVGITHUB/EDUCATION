@@ -112,167 +112,37 @@ export const HSPrograms = [
 
 export const grades = ["A1", "B2", "B3", "C4", "C5", "C6"];
 
+export const subjects = [
+  "English Language",
+  "Mathematics (Core)",
+  "Integrated Science",
+  "Social Studies",
+];
+
 export const programs = [
-  {
-    name: "Business Administration",
-    subjects: [
-      "English",
-      "Mathematics",
-      "Integrated Science",
-      "Social Studies",
-    ],
-    electives: ["Business Management", "Economics", "Elective Mathematics"],
-  },
-  {
-    name: "Bachelor of Law (LLB)",
-    subjects: [
-      "English",
-      "Mathematics",
-      "Integrated Science",
-      "Social Studies",
-    ],
-    electives: ["Literature in English", "Government", "History"],
-  },
-  {
-    name: "Bachelor of Arts (BA)",
-    subjects: [
-      "English",
-      "Mathematics",
-      "Integrated Science",
-      "Social Studies",
-    ],
-    electives: ["Literature in English", "Fine Arts", "Economics"],
-  },
-  {
-    name: "Bachelor in Architecture",
-    subjects: [
-      "English",
-      "Mathematics",
-      "Integrated Science",
-      "Social Studies",
-    ],
-    electives: ["Physics", "Elective Mathematics", "Economics"],
-  },
-  {
-    name: "Information Technology (IT)",
-    subjects: [
-      "English Language",
-      "Mathematics (Core)",
-      "Integrated Science",
-      "Social Studies",
-    ],
-    electives: [
-      "Elective Mathematics",
-      "Physics",
-      "Chemistry",
-      "Computer Studies/ICT",
-    ],
-  },
-  {
-    name: "Bachelor of Education (B.Ed.)",
-    subjects: [
-      "English Language",
-      "Mathematics (Core)",
-      "Integrated Science",
-      "Social Studies",
-    ],
-    electives: [
-      "Elective Mathematics",
-      "Physics",
-      "Chemistry",
-      "Computer Studies/ICT",
-    ],
-  },
-  {
-    name: "Bachelor of Science in Social Sciences (B.Sc.)",
-    subjects: [
-      "English Language",
-      "Mathematics (Core)",
-      "Integrated Science",
-      "Social Studies",
-    ],
-    electives: [
-      "Elective Mathematics",
-      "Physics",
-      "Chemistry",
-      "Computer Studies/ICT",
-    ],
-  },
-  {
-    name: "Bachelor of Arts in Communication Studies",
-    subjects: [
-      "English Language",
-      "Mathematics (Core)",
-      "Integrated Science",
-      "Social Studies",
-    ],
-    electives: [
-      "Elective Mathematics",
-      "Physics",
-      "Chemistry",
-      "Computer Studies/ICT",
-    ],
-  },
-  {
-    name: "Bachelor of Public Administration",
-    subjects: [
-      "English Language",
-      "Mathematics (Core)",
-      "Integrated Science",
-      "Social Studies",
-    ],
-    electives: [
-      "Elective Mathematics",
-      "Physics",
-      "Chemistry",
-      "Computer Studies/ICT",
-    ],
-  },
-  {
-    name: "Bachelor of Arts in International Relations",
-    subjects: [
-      "English Language",
-      "Mathematics (Core)",
-      "Integrated Science",
-      "Social Studies",
-    ],
-    electives: [
-      "Elective Mathematics",
-      "Physics",
-      "Chemistry",
-      "Computer Studies/ICT",
-    ],
-  },
-  {
-    name: "Bachelor of Arts in Tourism and Hospitality Management",
-    subjects: [
-      "English Language",
-      "Mathematics (Core)",
-      "Integrated Science",
-      "Social Studies",
-    ],
-    electives: [
-      "Elective Mathematics",
-      "Physics",
-      "Chemistry",
-      "Computer Studies/ICT",
-    ],
-  },
-  {
-    name: "Bachelor of Social Work",
-    subjects: [
-      "English Language",
-      "Mathematics (Core)",
-      "Integrated Science",
-      "Social Studies",
-    ],
-    electives: [
-      "Elective Mathematics",
-      "Physics",
-      "Chemistry",
-      "Computer Studies/ICT",
-    ],
-  },
+  "Business Administration",
+
+  "Law (LLB)",
+
+  "Arts (BA)",
+
+  "Bachelor in Architecture",
+
+  "Information Technology (IT)",
+
+  "Education (B.Ed.)",
+
+  "Science in Social Sciences (B.Sc.)",
+
+  "Arts in Communication Studies",
+
+  "Public Administration",
+
+  "Arts in International Relations",
+
+  "Arts in Tourism and Hospitality Management",
+
+  "Social Work",
 ];
 
 export const electives = [

@@ -73,6 +73,22 @@ const useEducationForm = () => {
   const [subjects, setSubjects] = useState<Subjects>([]);
   const [electives, setElectives] = useState<Electives>([]);
 
+  const [data, setData] = useState<{
+    HSPrograms: Option[];
+    OPPrograms: Option[];
+    Programs: Option[];
+    electives: Option[];
+    collegeSkills: Option[];
+    interestingCareers: Option[];
+  }>({
+    HSPrograms: [],
+    OPPrograms: [],
+    Programs: [],
+    electives: [],
+    collegeSkills: [],
+    interestingCareers: [],
+  });
+
   // Skills and interests
   const skillsState = useSelectedOptions();
   const interestsState = useSelectedOptions();
@@ -104,6 +120,10 @@ const useEducationForm = () => {
       setGrades,
       status,
       setStatus,
+    },
+    dataState: {
+      data,
+      setData,
     },
     subjectsAndElectives: {
       subjects,

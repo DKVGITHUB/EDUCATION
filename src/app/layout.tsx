@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Montserrat as FontSans } from "next/font/google";
 import "./globals.css";
 import { ClerkProvider } from "@clerk/nextjs";
+import { Toaster } from "@/components/ui/toaster";
 
 import { cn } from "@/lib/utils";
 import { Header } from "@/components/header";
@@ -28,6 +29,7 @@ export default function RootLayout({
           className={cn("min-h-screen bg-background font-sans antialiased")}
         >
           {children}
+          <Toaster />
         </body>
       </ClerkProvider>
     </html>

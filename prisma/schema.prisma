@@ -315,3 +315,28 @@ model Feedback {
   Feedbacks   Feedbacks? @relation(fields: [feedbacksId], references: [id])
   feedbacksId String?    @db.ObjectId
 }
+
+model URElective {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String @unique
+}
+
+model HSProgram {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String @unique
+}
+
+model UEProgram {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String @unique
+}
+
+model URSkill {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String @unique
+}
+
+model URInterest {
+  id   String @id @default(auto()) @map("_id") @db.ObjectId
+  name String @unique
+}

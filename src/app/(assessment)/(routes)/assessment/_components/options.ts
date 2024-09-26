@@ -1,6 +1,7 @@
 // Import types if not already defined
 type Option = { label: string; value: string };
 
+import { db } from "@/lib/db";
 // Import datasets
 import {
   daysOfMonth,
@@ -15,6 +16,7 @@ import {
   collegeSkills,
   interestingCareers,
   electives,
+  subjects,
 } from "./dataset";
 
 // Helper function to convert array to options
@@ -30,13 +32,60 @@ const toOptions = (arr: { label: string; value: string }[]): Option[] =>
     value: item.value,
   }));
 
-const toProgramOptions = (
-  arr: { name: string; subjects: string[]; electives: string[] }[]
-) =>
+const toDataOptions = (arr: { id: string; name: string }[]): Option[] =>
   arr.map((item) => ({
     label: item.name,
     value: item.name,
   }));
+
+// Fetch data from the database and convert to options
+async function fetchProgramsAndOthers() {
+  try {
+    // Fetch programs from the database
+    const hSProgram = await db.hSProgram.findMany();
+    const uEProgram = await db.uEProgram.findMany();
+    const uRElective = await db.uRElective.findMany();
+    const uRSkill = await db.uRSkill.findMany();
+    const uRInterest = await db.uRInterest.findMany();
+
+    // Convert programs and electives to options
+
+    const HSPrograms = toDataOptions(hSProgram);
+    const OPPrograms = toDataOptions(uEProgram);
+    const Programs = toDataOptions(uEProgram);
+    const electives = toDataOptions(uRElective);
+    const collegeSkills = toDataOptions(uRSkill);
+    const interestingCareers = toDataOptions(uRInterest);
+
+    console.log(
+      HSPrograms,
+      OPPrograms,
+      Programs,
+      electives,
+      collegeSkills,
+      interestingCareers
+    );
+
+    return {
+      HSPrograms,
+      OPPrograms,
+      Programs,
+      electives,
+      collegeSkills,
+      interestingCareers,
+    };
+  } catch (error) {
+    console.error("Error fetching data:", error);
+    return {
+      HSPrograms: [],
+      OPPrograms: [],
+      Programs: [],
+      electives: [],
+      collegeSkills: [],
+      interestingCareers: [],
+    };
+  }
+}
 
 // Create options objects
 export const options = {
@@ -44,13 +93,30 @@ export const options = {
   years: toNumberOptions(years),
   graduationYears: toNumberOptions(graduationYears),
   currentlyAttending: toOptions(currentlyAttending),
-  programs: toProgramOptions(programs),
-  optionalPrograms: toProgramOptions(programs),
-  HSPrograms: toNumberOptions(HSPrograms),
   grades: toNumberOptions(grades),
   ghanaRegions: toOptions(ghanaRegions),
   typeUnis: toOptions(typeUnis),
-  collegeSkills: toOptions(collegeSkills),
-  interestingCareers: toNumberOptions(interestingCareers),
-  electives: toNumberOptions(electives),
+  subjects,
 };
+
+async function getDynamicOptions() {
+  const {
+    HSPrograms,
+    OPPrograms,
+    Programs,
+    electives,
+    collegeSkills,
+    interestingCareers,
+  } = await fetchProgramsAndOthers();
+
+  return {
+    HSPrograms,
+    OPPrograms,
+    Programs,
+    electives,
+    collegeSkills,
+    interestingCareers,
+  };
+}
+
+export default getDynamicOptions;
