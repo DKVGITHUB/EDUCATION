@@ -4,7 +4,7 @@
 import React, { useState, useEffect, useRef } from "react";
 import Link from "next/link";
 import Image from "next/image";
-import { usePathname } from "next/navigation";
+import { usePathname, useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
 import {
   ClerkLoading,
@@ -15,6 +15,7 @@ import {
   SignInButton,
   SignUpButton,
   useUser,
+  useAuth,
 } from "@clerk/nextjs";
 import { Loader } from "lucide-react";
 import { cn } from "@/lib/utils";
@@ -38,6 +39,8 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { Form, FormControl, FormField, FormItem, FormMessage } from "./ui/form";
 import axios from "axios";
 import toast from "react-hot-toast";
+import { isAdministrator } from "@/lib/admin";
+import { Button } from "@/components/ui/button";
 
 const formSchema = z.object({
   feedback: z.string().min(1),
@@ -53,7 +56,7 @@ const Routes = [
 ];
 
 const AdminRoutes = [
-  { name: "Create", href: "/admin/create" },
+  { name: "Activity", href: "/admin/create" },
   { name: "Feedback", href: "/admin/feedback" },
 ];
 
@@ -61,6 +64,9 @@ const AdminRoutes = [
 export const Header = () => {
   // Hooks for managing state
   const pathname = usePathname();
+
+  const router = useRouter();
+  const { userId } = useAuth();
 
   const { user, isSignedIn } = useUser();
 
@@ -247,7 +253,7 @@ export const Header = () => {
               ))}
             </ul>
 
-            <div>
+            
               {isSignedIn && (
                 <div>
                   <Dialog>
@@ -312,7 +318,19 @@ export const Header = () => {
                   </Dialog>
                 </div>
               )}
-            </div>
+            {isAdministrator(userId) && (
+              <Button
+                variant={"outline"}
+                className={`mr-7 text-sm bg-[none] uppercase font-bold shadow-none mt-2 max-[980px]:hidden ${
+                  isAdminMode && "hidden"
+                }`}
+                onClick={() => {
+                  router.push("/admin/create");
+                }}
+              >
+                Administrator{" "}
+              </Button>
+            )}
 
             <div className=" justify-between hidden items-center min-[1030px]:flex">
               <ClerkLoading>
