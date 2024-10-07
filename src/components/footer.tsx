@@ -67,8 +67,7 @@ const socials = [
 ];
 // Functional component for rendering the Footer section
 export default function Footer() {
-  const router = useRouter();
-  const { userId } = useAuth();
+  
 
   return (
     <footer className="bg-[#242628]">
@@ -175,9 +174,7 @@ export default function Footer() {
               © {new Date().getFullYear()}{" "}
               <span
                 className="cursor-pointer text-white"
-                onClick={() => {
-                  isAdministrator(userId) && router.push("/admin/create");
-                }}
+                
               >
                 EDU-ALL
               </span>
