@@ -13,14 +13,7 @@ export default function Result() {
   };
   return (
     <div className="max-w-[1380px] w-full my-0 px-5 py-0">
-      <div className="p-5">
-        <Button
-          className="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded"
-          onClick={handlePrint}
-        >
-          Print Result
-        </Button>
-      </div>
+      
       <div>
         {/* Header with a dynamic title */}
         <div className="bg-[#00aeef] border-[#00aeef]  px-[15px] py-2.5 border-b-transparent border-b border-solid">
