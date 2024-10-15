@@ -289,7 +289,7 @@ const Assessment = ({
 
         // If careers, majors, and unis data exist, navigate to the result page
         if (careers && majors && unis) {
-          router.push("/result");
+          router.replace("/result");
         }
       } else {
         // Log an error if cyclic references are detected
