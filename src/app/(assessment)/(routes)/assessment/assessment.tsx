@@ -591,7 +591,7 @@ const Assessment = ({
                             name="programs"
                             render={({ field }) => (
                               <FormItem>
-                                <FormLabel>Programs</FormLabel>
+                                <FormLabel>Programs (Field of Interest)</FormLabel>
                                 <FormControl>
                                   <Combobox
                                     options={Programs}
